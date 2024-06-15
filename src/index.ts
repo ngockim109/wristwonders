@@ -9,6 +9,7 @@ const StartServer = () => {
   // Middleware
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
+  app.use(express.static("public"));
 
   // view engine
   app.engine("handlebars", engine());

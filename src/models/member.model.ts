@@ -1,11 +1,11 @@
-import bcrypt from "bcrypt";
 import mongoose from "mongoose";
+import { hashPassword } from "../utils/jwt";
 
 const memberSchema = new mongoose.Schema(
   {
-    membername: { type: String, required: true },
-    name: String,
-    YOB: Number,
+    membername: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    YOB: { type: Number, required: true },
     password: { type: String, required: true },
     isAdmin: { type: Boolean, default: false }
   },
@@ -14,10 +14,7 @@ const memberSchema = new mongoose.Schema(
 
 memberSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(this.password, salt);
-  this.password = hashedPassword;
+  this.password = await hashPassword(this.password);
   next();
 });
 

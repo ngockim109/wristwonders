@@ -1,4 +1,4 @@
-import { IBranch } from "./branch.interface";
+import { IBrand } from "./brand.interface";
 import { IComment } from "./comment.interface";
 
 export interface IWatch {
@@ -8,7 +8,7 @@ export interface IWatch {
   Automatic: boolean;
   watchDescription: string;
   comments: IComment[];
-  brand: IBranch;
+  brand: IBrand;
   createdAt: Date;
   updatedAt: Date;
 }

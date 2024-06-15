@@ -7,5 +7,5 @@ const brandSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const branchModel = mongoose.model("Branch", brandSchema);
-export default branchModel;
+const brandModel = mongoose.model("Brand", brandSchema);
+export default brandModel;
