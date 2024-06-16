@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Member from "../models/member.model";
 import { IMember } from "../interfaces/member.interface";
+import { ACCESS_TOKEN_EXPIRATION, createAccessToken } from "../utils/jwt";
 
 const createMember = async (req: Request, res: Response) => {
   const member = {
@@ -10,6 +11,7 @@ const createMember = async (req: Request, res: Response) => {
     password: req.body.password,
     isAdmin: false
   };
+  console.log(req.body);
   member.YOB = parseInt(member.YOB, 10);
 
   if (isNaN(member.YOB)) {
@@ -29,10 +31,16 @@ const createMember = async (req: Request, res: Response) => {
     const newMember = new Member(member);
 
     // Save the member to the database
-    await newMember.save();
+    const mem = await newMember.save();
 
+    // Save token
+    const token = createAccessToken({ member_id: mem._id });
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      maxAge: ACCESS_TOKEN_EXPIRATION * 1000
+    });
     // Respond with success message or redirect to login
-    res.status(201).json({ message: "Register successfully!" });
+    res.status(201).json({ message: "Registered successfully" });
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Bad request!" });

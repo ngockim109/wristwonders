@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import express from "express";
 import router from "./routes/index.route";
 import { engine } from "express-handlebars";
+import cookieParser from "cookie-parser";
 const app = express();
 
 const StartServer = () => {
@@ -10,6 +11,9 @@ const StartServer = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(express.static("public"));
+
+  // cookie
+  app.use(cookieParser());
 
   // view engine
   app.engine("handlebars", engine());

@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["membername", "wristwonders"]
+  "cSpell.words": ["membername", "wristwonders"],
+  "compile-hero.disable-compile-files-on-did-save-code": true
 }

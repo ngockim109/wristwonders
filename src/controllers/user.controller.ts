@@ -32,7 +32,7 @@ const createUser = async (req: Request, res: Response) => {
     await newUser.save();
 
     // Respond with success message or redirect to login
-    res.status(201).json({ message: "Register successfully!" });
+    res.status(201).json({ message: "Create member successfully!" });
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Bad request!" });
