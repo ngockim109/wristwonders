@@ -42,7 +42,9 @@ const createMember = async (req: Request, res: Response) => {
       maxAge: ACCESS_TOKEN_EXPIRATION * 1000
     });
     // Respond with success message or redirect to login
-    res.status(201).json({ member: mem, message: "Registered successfully" });
+    res
+      .status(201)
+      .json({ member: mem.name, message: "Registered successfully" });
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Bad request!" });
