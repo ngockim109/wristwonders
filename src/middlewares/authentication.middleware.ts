@@ -9,7 +9,7 @@ export const requireAuth = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies.jwt;
+  const token = req.cookies.access_token;
 
   if (token) {
     jwt.verify(
@@ -30,7 +30,7 @@ export const requireAuth = (
 };
 
 export const checkUser = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.jwt;
+  const token = req.cookies.access_token;
 
   if (token) {
     jwt.verify(
@@ -38,18 +38,31 @@ export const checkUser = (req: Request, res: Response, next: NextFunction) => {
       config.SECRET_KEY_FOR_ACCESS_TOKEN,
       async (error, decodedToken) => {
         if (error) {
-          console.log(error.message);
+          console.log("JWT verification error:", error.message);
           res.locals.member = null;
           next();
         } else {
-          console.log(decodedToken);
-          const member = await Member.findById(decodedToken.member_id);
-          res.locals.member = member;
-          next();
+          console.log("Decoded Token:", decodedToken);
+          try {
+            const member = await Member.findById(decodedToken.member_id);
+            if (member) {
+              res.locals.member = member;
+              console.log("Member set in res.locals:", res.locals.member);
+            } else {
+              res.locals.member = null;
+              console.log("Member not found in database");
+            }
+            next();
+          } catch (dbError) {
+            console.error("Error fetching member from DB:", dbError);
+            res.locals.member = null;
+            next();
+          }
         }
       }
     );
   } else {
+    console.log("No token provided, res.locals.member set to null");
     res.locals.member = null;
     next();
   }

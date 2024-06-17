@@ -3,7 +3,7 @@ import jwt, { VerifyOptions, SignOptions } from "jsonwebtoken";
 import { config } from "../config/dotenv.config";
 
 const { SECRET_KEY_FOR_ACCESS_TOKEN, SECRET_KEY_FOR_REFRESH_TOKEN } = config;
-export const ACCESS_TOKEN_EXPIRATION = 3 * 24 * 60 * 60 * 1000;
+export const ACCESS_TOKEN_EXPIRATION = 3 * 24 * 60 * 60;
 export const REFRESH_TOKEN_EXP = "30d";
 
 // Hash password
@@ -32,5 +32,3 @@ export const createAccessToken = (
     ...opts
   });
 };
-
-// verify jwt

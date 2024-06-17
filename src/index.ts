@@ -5,6 +5,7 @@ import router from "./routes/index.route";
 import { engine } from "express-handlebars";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errorHandler.middleware";
+import path from "path";
 const app = express();
 
 const StartServer = () => {
@@ -17,9 +18,23 @@ const StartServer = () => {
   app.use(cookieParser());
 
   // view engine
-  app.engine("handlebars", engine());
+  app.engine(
+    "handlebars",
+    engine({
+      defaultLayout: "main",
+      extname: ".handlebars",
+      partialsDir: path.join(__dirname, "views/partials"),
+      helpers: {
+        isString: function (value) {
+          return typeof value === "string";
+        }
+      }
+    })
+  );
   app.set("view engine", "handlebars");
-  app.set("views", "src/views");
+  app.set("views", path.join(__dirname, "views"));
+  // Static files
+  app.use(express.static(path.join(__dirname, "public")));
 
   // Routes
   console.log("Views directory:", app.get("views"));

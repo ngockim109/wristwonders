@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Member from "../models/member.model";
 import { IMember } from "../interfaces/member.interface";
+import { BadRequestError } from "../errors/badRequestError";
 
 const createUser = async (req: Request, res: Response) => {
   const user = {
@@ -10,10 +11,11 @@ const createUser = async (req: Request, res: Response) => {
     password: req.body.password,
     isAdmin: req.body.isAdmin || false
   };
-  user.YOB = parseInt(user.YOB, 10);
+  const YOBString = req.body.YOB;
+  const yob = Number(YOBString);
 
-  if (isNaN(user.YOB)) {
-    return res.status(400).json({ message: "Year of Birth must be a number!" });
+  if (isNaN(yob)) {
+    throw new BadRequestError("Year of birth must be a number!", user);
   }
   try {
     // Check if membername already exists
@@ -22,31 +24,30 @@ const createUser = async (req: Request, res: Response) => {
     });
 
     if (existingUser) {
-      return res.status(400).json({ message: "Membername already exists!" });
+      throw new BadRequestError("Membername already exists!", existingUser);
     }
 
     // Create a new user instance
     const newUser = new Member(user);
 
-    // Save the member to the database
+    // Save the user to the database
     await newUser.save();
 
     // Respond with success message or redirect to login
     res.status(201).json({ message: "Create member successfully!" });
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Bad request!" });
-    res.status(500).json({ message: "Server error" });
+    res.redirect("/wristwonders/error/500");
   }
 };
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users: IMember[] = await Member.find().exec();
-    res.status(200).json(users);
+    return res.status(200).json(users);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+    res.redirect("/wristwonders/error/500");
   }
 };
 

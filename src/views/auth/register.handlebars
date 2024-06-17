@@ -1,0 +1,27 @@
+<h1>Register</h1>
+{{#if (isString error)}}
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
+{{/if}}
+<form action="/wristwonders/auth/register" method="POST">
+    <label for="membername">Membername:</label>
+    <input type="text" id="membername" name="membername" required min="1"><br><br>
+    <p class="text-danger">{{error.username}}</p>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required min="8"><br><br>
+    <p class="text-danger">{{error.password}}</p>
+
+    <label for="name">Full Name:</label>
+    <input type="text" id="name" name="name" min="1"><br><br>
+    <p class="text-danger">{{error.name}}</p>
+
+    <label for="YOB">Year of Birth:</label>
+    <input type="number" id="YOB" name="YOB"><br><br>
+    <p class="text-danger">{{error.YOB}}</p>
+
+    <button type="submit">Register</button>
+
+    <a href="/wristwonders/auth/login">Login</a>
+</form>

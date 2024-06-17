@@ -8,7 +8,9 @@ import { loginSchema } from "./validateSchema/loginSchema.validate.schema";
 const authRoute = express.Router();
 
 authRoute.get("/register", (req: Request, res: Response) => {
-  res.render("register", { title: "Register" });
+  !res.locals.member
+    ? res.render("auth/register", { title: "Register" })
+    : res.redirect("/wristwonders");
 });
 
 authRoute.post(
@@ -17,7 +19,9 @@ authRoute.post(
   memberController.createMember
 );
 authRoute.get("/login", (req: Request, res: Response) => {
-  res.render("login", { title: "Login" });
+  !res.locals.member
+    ? res.render("auth/login", { title: "Login" })
+    : res.redirect("/wristwonders");
 });
 
 authRoute.post("/login", validate(loginSchema), authController.login);
