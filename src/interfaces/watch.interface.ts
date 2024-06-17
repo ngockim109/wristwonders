@@ -5,7 +5,7 @@ export interface IWatch {
   watchName: string;
   image: string;
   price: number;
-  Automatic: boolean;
+  automatic: boolean;
   watchDescription: string;
   comments: IComment[];
   brand: IBrand;

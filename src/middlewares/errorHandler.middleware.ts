@@ -23,7 +23,7 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
       return res.redirect("/wristwonders/login");
     }
     if (error instanceof Unauthorized) {
-      return res.redirect("/wristwonders/error/404");
+      return res.redirect("/wristwonders/error/403");
     }
     if (error instanceof BadRequestError) {
       const originalUrl = req.url;

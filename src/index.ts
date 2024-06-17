@@ -4,6 +4,7 @@ import express from "express";
 import router from "./routes/index.route";
 import { engine } from "express-handlebars";
 import cookieParser from "cookie-parser";
+import errorHandler from "./middlewares/errorHandler.middleware";
 const app = express();
 
 const StartServer = () => {
@@ -24,6 +25,7 @@ const StartServer = () => {
   console.log("Views directory:", app.get("views"));
   // main route
   app.use("/wristwonders", router);
+  app.use(errorHandler);
 
   // Start server
   app.listen(config.port, () => {

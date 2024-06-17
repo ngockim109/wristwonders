@@ -43,7 +43,7 @@ export const checkUser = (req: Request, res: Response, next: NextFunction) => {
           next();
         } else {
           console.log(decodedToken);
-          const member = await Member.findById(decodedToken.id);
+          const member = await Member.findById(decodedToken.member_id);
           res.locals.member = member;
           next();
         }
