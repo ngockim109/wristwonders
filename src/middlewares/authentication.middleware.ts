@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import jwt, { VerifyOptions, SignOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { config } from "../config/dotenv.config";
 import Member from "../models/member.model";
+import { Unauthenticated } from "../errors/unauthenticatedEror";
+
 export const requireAuth = (
   req: Request,
   res: Response,
@@ -15,8 +17,7 @@ export const requireAuth = (
       config.SECRET_KEY_FOR_ACCESS_TOKEN,
       (error, decodedToken) => {
         if (error) {
-          console.log(error.message);
-          res.redirect("/wristwonders/login");
+          return next(new Unauthenticated());
         } else {
           console.log(decodedToken);
           next();
@@ -24,7 +25,7 @@ export const requireAuth = (
       }
     );
   } else {
-    res.redirect("/wristwonders/login");
+    return next(new Unauthenticated());
   }
 };
 

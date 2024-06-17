@@ -1,4 +1,3 @@
-import moment from "moment";
 import { z } from "zod";
 
 export const createUserSchema = z.object({
@@ -12,12 +11,6 @@ export const createUserSchema = z.object({
     name: z
       .string()
       .min(1, { message: "Name must be greater than 1 characters!" })
-      .optional(),
-    YOB: z
-      .string()
-      .refine((value) => moment(value, "YYYY").isValid(), {
-        message: "Year of birth must be a valid year!"
-      })
       .optional(),
     isAdmin: z.boolean().optional()
   })

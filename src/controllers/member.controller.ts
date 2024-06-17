@@ -12,15 +12,17 @@ const createMember = async (req: Request, res: Response) => {
     isAdmin: false
   };
   console.log(req.body);
-  member.YOB = parseInt(member.YOB, 10);
-
-  if (isNaN(member.YOB)) {
-    return res.status(400).json({ message: "Year of Birth must be a number!" });
+  const YOBString = req.body.YOB;
+  const yob = Number(YOBString);
+  console.log(yob);
+  if (isNaN(yob)) {
+    return res.status(400).json({ message: "Year of birth must be a number!" });
   }
   try {
     // Check if membername already exists
     const existingMember: IMember = await Member.findOne({
-      membername: member.membername
+      membername: member.membername,
+      YOB: yob
     });
 
     if (existingMember) {
@@ -40,7 +42,7 @@ const createMember = async (req: Request, res: Response) => {
       maxAge: ACCESS_TOKEN_EXPIRATION * 1000
     });
     // Respond with success message or redirect to login
-    res.status(201).json({ message: "Registered successfully" });
+    res.status(201).json({ member: mem, message: "Registered successfully" });
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Bad request!" });

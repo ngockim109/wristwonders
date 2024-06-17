@@ -13,7 +13,7 @@
     <span class="name-error text-danger"></span>
 
     <label for="YOB">Year of Birth:</label>
-    <input type="string" id="YOB" name="YOB"><br><br>
+    <input type="number" id="YOB" name="YOB"><br><br>
     <span class="yob-error text-danger"></span>
 
     <button type="submit">Register</button>
@@ -38,20 +38,21 @@
         // get values
         const membername = form.membername.value;
         const password = form.password.value;
-        const yob = form.YOB.value;
+        const YOB = form.YOB.value;
         const name = form.name.value;
 
         try {
             const res = await fetch('/wristwonders/register', {
                 method: 'POST',
-                body: JSON.stringify({ membername, password, yob, name }),
+                body: JSON.stringify({ membername, password, YOB, name }),
                 headers: { 'Content-Type': 'application/json' }
             });
             const data = await res.json();
             console.log(data);
+            console.log(data.member);
 
-            if (data.user) {
-                location.assign('/');
+            if (data.member) {
+                location.assign('/wristwonders');
             }
 
         }

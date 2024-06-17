@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { createUserSchema } from "./validateSchema/createUserSchema.validate.schema";
-import validate from "../utils/validate";
+import validate from "../middlewares/validate.middleware";
 import memberController from "../controllers/member.controller";
 import authController from "../controllers/auth.controller";
 import { loginSchema } from "./validateSchema/loginSchema.validate.schema";
@@ -13,7 +13,7 @@ authRoute.get("/register", (req: Request, res: Response) => {
 
 authRoute.post(
   "/register",
-  // validate(createUserSchema),
+  validate(createUserSchema),
   memberController.createMember
 );
 authRoute.get("/login", (req: Request, res: Response) => {
