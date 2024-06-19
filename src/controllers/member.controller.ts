@@ -1,10 +1,15 @@
-import { Request, Response } from "express";
-import Member from "../models/member.model";
+import { Request, Response, NextFunction } from "express";
 import { IMember } from "../interfaces/member.interface";
-import { ACCESS_TOKEN_EXPIRATION, createAccessToken } from "../utils/jwt";
-import { BadRequestError } from "../errors/badRequestError";
+import { ACCESS_TOKEN_EXPIRATION } from "../utils/jwt";
+import MemberService from "../services/member.service";
+import { Unauthenticated } from "../errors/unauthenticatedEror";
 
-const createMember = async (req: Request, res: Response) => {
+// Member register account
+const createMember = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   if (!res.locals.member) {
     const member = {
       membername: req.body.membername,
@@ -14,68 +19,155 @@ const createMember = async (req: Request, res: Response) => {
       isAdmin: false
     };
     const YOBString = req.body.YOB;
-    const yob = Number(YOBString);
-
-    if (isNaN(yob)) {
-      throw new BadRequestError("Year of birth must be a number!", member);
-    }
     try {
-      // Check if membername already exists
-      const existingMember: IMember = await Member.findOne({
-        membername: member.membername,
-        YOB: yob
-      });
-
-      if (existingMember) {
-        throw new BadRequestError("Membername already exists!", existingMember);
+      const token = await MemberService.createMemberHandler(YOBString, member);
+      if (token) {
+        res.cookie("access_token", token, {
+          httpOnly: true,
+          maxAge: ACCESS_TOKEN_EXPIRATION * 1000
+        });
+        res.redirect("/wristwonders");
       }
-
-      // Create a new member instance
-      const newMember = new Member(member);
-
-      // Save the member to the database
-      const mem = await newMember.save();
-
-      // Save token
-      const token = createAccessToken({ member_id: mem._id });
-      res.cookie("access_token", token, {
-        httpOnly: true,
-        maxAge: ACCESS_TOKEN_EXPIRATION * 1000
-      });
-      // Respond with success message or redirect to login
-      res.redirect("/wristwonders");
     } catch (error) {
-      console.log(error);
-      res.redirect("/wristwonders/error/500");
+      next(error);
     }
   } else res.redirect("/wristwonders");
 };
 
-const getAllMembers = async (req: Request, res: Response) => {
+// Get all member who is not admin
+const getAllMembers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const members: IMember[] = await Member.find({ isAdmin: false }).exec();
-    res.status(200).json(members);
+    const members: IMember[] = await MemberService.getAllMembersHandler();
+    // const transformedMembers = members.map((member: IMember & { _id: Types.ObjectId }) => ({
+    //   ...member.toObject(), // Convert to plain object
+    //   _id: member._id.toString() // Convert _id to string
+    // }));
+    res.render("members", { member: members, title: "Members" });
   } catch (error) {
-    console.error(error);
-    res.redirect("/wristwonders/error/500");
+    next(error);
   }
 };
 
-const getMember = async (req: Request, res: Response) => {
+// Get member from locals but just get membername, name, YOB
+const getMember = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const memberLocals = res.locals.member;
-    const member: IMember = await Member.findById(memberLocals._id).exec();
+    const member: IMember = await MemberService.getMemberHandler(
+      memberLocals._id
+    );
     const { membername, name, YOB } = member;
     const newMember = { membername, name, YOB };
-    res.render("profile", { member: newMember, title: "Profile" });
+    res.render("members/profile", { member: newMember, title: "Profile" });
   } catch (error) {
-    console.error(error);
-    res.redirect("/wristwonders/error/500");
+    next(error);
+  }
+};
+
+// Update member profile (name and YOB)
+const getUpdateProfile = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (res.locals.member) {
+      const { membername, name, YOB } = res.locals.member;
+      const newMember = { membername, name, YOB };
+      res.render("members/profile/update_profile", {
+        title: "Update profile",
+        member: newMember
+      });
+    } else {
+      return next(new Unauthenticated());
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const memberLocals = res.locals.member;
+    const updateData = {
+      name: req.body.name,
+      YOB: req.body.YOB
+    };
+
+    const updatedMember = await MemberService.updateProfileHandler(
+      memberLocals._id,
+      updateData
+    );
+    const { membername, name, YOB } = updatedMember;
+    const newMember = { membername, name, YOB };
+    if (updatedMember) {
+      res.render("members/profile/update_profile", {
+        member: newMember,
+        title: "Update profile",
+        message: "Update profile successfully!"
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update member password
+const getUpdatePassword = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (res.locals.member) {
+      const { membername, name, YOB } = res.locals.member;
+      const newMember = { membername, name, YOB };
+      res.render("members/profile/update_password", {
+        title: "Change password",
+        member: newMember
+      });
+    } else {
+      return next(new Unauthenticated());
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updatePassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const memberLocals = res.locals.member;
+    const newPassword = req.body.password;
+    const oldPassword = req.body.oldPassword;
+
+    const updateMember = await MemberService.updatePasswordHandler(
+      memberLocals._id,
+      oldPassword,
+      newPassword
+    );
+    const { membername, name, YOB } = memberLocals;
+    const newMember = { membername, name, YOB };
+    if (updateMember) {
+      res.render("members/profile/update_password", {
+        member: newMember,
+        title: "Change password",
+        message: "Update password successfully!"
+      });
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
 export default {
   createMember,
   getAllMembers,
-  getMember
+  getMember,
+  updateProfile,
+  updatePassword,
+  getUpdateProfile,
+  getUpdatePassword
 };

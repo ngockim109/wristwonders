@@ -3,6 +3,6 @@ import mainController from "../controllers/main.controller";
 
 const mainRoute = express.Router();
 
-mainRoute.get("/logout", mainController.getHomePage);
+mainRoute.get("/", mainController.getHomePage);
 
 export default mainRoute;

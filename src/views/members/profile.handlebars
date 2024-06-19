@@ -1,9 +1,12 @@
 <h1>Welcome, {{ member.name }}</h1>
 <div>
     {{#if member}}
+    <h2>Profile Information</h2>
     <p>Membername: {{ member.membername }}</p>
     <p>Name: {{ member.name }}</p>
     <p>Year of Birth: {{ member.YOB }}</p>
+    <a href="/wristwonders/members/profile/update-profile">Update Profile</a>
+    <a href="/wristwonders/members/profile/update-password">Change Password</a>
     {{else}}
     <p>Member not found.</p>
     {{/if}}

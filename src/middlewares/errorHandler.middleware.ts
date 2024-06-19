@@ -7,14 +7,40 @@ import { BadRequestError } from "../errors/badRequestError";
 import { NotFoundError } from "../errors/notFoundError";
 
 const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
+  const transformToTitleCase = (text: string) => {
+    return text
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
+  const transformToSnakeCase = (text: string) => {
+    return text.replace(/-/g, "_");
+  };
+
+  const getTitleFromUrl = (url: string) => {
+    const lastSegment = url.substring(url.lastIndexOf("/") + 1);
+    return transformToTitleCase(lastSegment);
+  };
+
+  const getOriginalUrl = (url: string) => {
+    const urlSegments = url.split("/");
+    // Remove the base part (e.g., "wristwonders")
+    const baseRemoved = urlSegments.slice(2).join("/");
+    const lastSegment = baseRemoved.substring(baseRemoved.lastIndexOf("/") + 1);
+    const basePath = baseRemoved.replace(`/${lastSegment}`, "");
+    return `${basePath}/${transformToSnakeCase(lastSegment)}`;
+  };
+  // Transform the title and originalUrl based on req.url
+  const title = getTitleFromUrl(req.url);
+  const originalUrl = getOriginalUrl(req.url);
+
   if (error instanceof GlobalError) {
     // Handle validation errors
     if (error instanceof ValidationError) {
-      // get auth/login from url, remove website name
-      const originalUrl = req.url.split("/").slice(2).join("/");
-      const lastString = req.url.substring(req.url.lastIndexOf("/") + 1);
-      const title = lastString.charAt(0).toUpperCase() + lastString.slice(1);
-      console.log(title);
+      // const originalUrl = req.url.split("/").slice(2).join("/");
+      // const lastString = req.url.substring(req.url.lastIndexOf("/") + 1);
+      // const title = lastString.charAt(0).toUpperCase() + lastString.slice(1);
+      console.log(title, originalUrl);
       const data =
         error.data && typeof error.data === "object" ? error.data : {};
       // console.log(data);
@@ -40,10 +66,9 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
 
     // Handle bad request errors
     if (error instanceof BadRequestError) {
-      // get auth/login from url, remove website name
-      const originalUrl = req.url.split("/").slice(2).join("/");
-      const lastString = req.url.substring(req.url.lastIndexOf("/") + 1);
-      const title = lastString.charAt(0).toUpperCase() + lastString.slice(1);
+      // const originalUrl = req.url.split("/").slice(2).join("/");
+      // const lastString = req.url.substring(req.url.lastIndexOf("/") + 1);
+      // const title = lastString.charAt(0).toUpperCase() + lastString.slice(1);
       const data =
         error.data && typeof error.data === "object" ? error.data : {};
 

@@ -5,6 +5,10 @@ import { createUserSchema } from "./validateSchema/createUserSchema.validate.sch
 
 const userRoute = express.Router();
 
-userRoute.get("/", userController.getAllUsers);
-userRoute.post("/", validate(createUserSchema), userController.createUser);
+userRoute.get("/user_management", userController.getAllUsers);
+userRoute.post(
+  "/user_management",
+  validate(createUserSchema),
+  userController.createUser
+);
 export default userRoute;

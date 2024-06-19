@@ -1,0 +1,20 @@
+<h1>Update Profile</h1>
+{{#if (isString message)}}
+<div class="alert alert-success" role="alert">
+    {{message}}
+</div>
+{{/if}}
+{{#if (isString error)}}
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
+{{/if}}
+<form action="/wristwonders/members/profile/update-profile" method="POST">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="{{member.name}}" required min="1">
+    <p class="text-danger">{{error.name}}</p>
+    <label for="YOB">Year of Birth:</label>
+    <input type="number" id="YOB" name="YOB" value="{{member.YOB}}" required>
+    <p class="text-danger">{{error.YOB}}</p>
+    <button type="submit">Update</button>
+</form>
