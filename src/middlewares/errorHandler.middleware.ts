@@ -33,7 +33,29 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   // Transform the title and originalUrl based on req.url
   const title = getTitleFromUrl(req.url);
   const originalUrl = getOriginalUrl(req.url);
-
+  const member = res.locals.member;
+  const {
+    membername,
+    YOB,
+    name,
+    _id,
+    password,
+    isAdmin,
+    createdAt,
+    updatedAt,
+    __v
+  } = member;
+  const newMember = {
+    membername,
+    YOB,
+    name,
+    _id,
+    password,
+    isAdmin,
+    createdAt,
+    updatedAt,
+    __v
+  };
   if (error instanceof GlobalError) {
     // Handle validation errors
     if (error instanceof ValidationError) {
@@ -47,7 +69,7 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
       console.log(error.errors);
       return res.render(originalUrl, {
         title: title,
-        member: res.locals.member,
+        member: newMember,
         error: error.errors,
         ...data
       });
@@ -66,18 +88,16 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
 
     // Handle bad request errors
     if (error instanceof BadRequestError) {
-      // const originalUrl = req.url.split("/").slice(2).join("/");
-      // const lastString = req.url.substring(req.url.lastIndexOf("/") + 1);
-      // const title = lastString.charAt(0).toUpperCase() + lastString.slice(1);
       const data =
         error.data && typeof error.data === "object" ? error.data : {};
 
       // console.log(data);
       console.log("message", error.message);
       console.log("error", error);
+
       return res.render(originalUrl, {
         title: title,
-        member: res.locals.member,
+        member: newMember,
         error: error.message,
         ...data
       });

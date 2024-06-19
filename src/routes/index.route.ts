@@ -7,6 +7,7 @@ import { checkUser } from "../middlewares/authentication.middleware";
 import { requireAuthor } from "../middlewares/authorization.middleware";
 import { NotFoundError } from "../errors/notFoundError";
 import mainRoute from "./main.route";
+import brandRoute from "./brand.route";
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.use("/", mainRoute);
 router.use("/auth", authRoute);
 router.use("/members", memberRoute);
 router.use("/users", requireAuthor([true]), userRoute);
+router.use("/brands", brandRoute);
 router.use("/error", errorRoute);
 
 // test 500 error

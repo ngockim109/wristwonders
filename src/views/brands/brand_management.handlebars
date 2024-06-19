@@ -1,0 +1,122 @@
+<h1>Brand Management</h1>
+
+{{#if (isString message)}}
+<div class="alert alert-success" role="alert">
+    {{message}}
+</div>
+{{/if}}
+
+{{#if (isString error)}}
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
+{{/if}}
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createBrandModal">
+    Create Brand
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="createBrandModal" tabindex="-1" aria-labelledby="createBrandModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createBrandModalLabel">Create New Brand</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createBrandForm" method="POST">
+                    <div class="form-group">
+                        <label for="brandName">Brand name:</label>
+                        <input type="text" class="form-control" id="brandName" name="brandName" required>
+                        <small class="form-text text-danger">{{error.brandName}}</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- List all brands -->
+<div class="mt-4">
+    <table class="table table-striped bordered">
+        <thead>
+            <tr>
+                <th scope="col">Brand Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each brands}}
+            <tr>
+                <td>{{this.brandName}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#updateBrandModal-{{this.id}}">
+                        Update
+                    </button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#deleteBrandModal-{{this.id}}">
+                        Update
+                    </button>
+                    <form action="/wristwonders/brands/brand-management/{{this._id}}?_method=DELETE" method="POST">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+
+            <!-- Update Brand Modal -->
+            <div class="modal fade" id="updateBrandModal-{{this._id}}" tabindex="-1"
+                aria-labelledby="updateBrandModalLabel-{{this._id}}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateBrandModalLabel-{{this._id}}">Update Brand</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/wristwonders/brands/brand-management/{{this._id}}?_method=PUT" method="POST">
+                                <div class="form-group">
+                                    <label for="updateBrandName-{{this._id}}">New Brand Name:</label>
+                                    <input type="text" class="form-control" id="updateBrandName-{{this._id}}"
+                                        name="brandName" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Delete Brand Modal -->
+            <div class="modal fade" id="deleteBrandModal-{{this._id}}" tabindex="-1"
+                aria-labelledby="deleteBrandModalLabel-{{this._id}}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteBrandModalLabel-{{this._id}}">Delete Brand</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure want to delete brand?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <form action="/wristwonders/brands/brand-management/{{this._id}}?_method=DELETE"
+                                method="POST">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

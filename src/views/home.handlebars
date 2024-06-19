@@ -1,1 +1,11 @@
 <h1>Home</h1>
+<div class="watch-cards">
+    {{#each watches}}
+    <div class="watch-card">
+        <img src="{{ image }}" alt="{{ watchName }} Image">
+        <h2>{{ watchName }}</h2>
+        <p>Brand: {{ brand.name }}</p>
+        <a href="/watches/{{ _id }}">View Details</a>
+    </div>
+    {{/each}}
+</div>

@@ -46,7 +46,7 @@ const getAllMembers = async (
     //   ...member.toObject(), // Convert to plain object
     //   _id: member._id.toString() // Convert _id to string
     // }));
-    res.render("members", { member: members, title: "Members" });
+    res.render("members", { members: members, title: "Members" });
   } catch (error) {
     next(error);
   }

@@ -19,13 +19,13 @@ memberRoute.get(
   requireSelf,
   memberController.getUpdatePassword
 );
-memberRoute.post(
+memberRoute.put(
   "/profile/update-profile",
   requireSelf,
   validate(updateProfileSchema),
   memberController.updateProfile
 );
-memberRoute.post(
+memberRoute.put(
   "/profile/update-password",
   requireSelf,
   validate(updatePasswordSchema),

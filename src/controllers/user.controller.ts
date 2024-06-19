@@ -27,7 +27,10 @@ const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const users: IMember[] = await UserService.getAllUsersHandler();
     if (users) {
-      return res.render("users/user_management");
+      return res.render("users/user_management", {
+        users: users,
+        title: "Users"
+      });
     }
   } catch (error) {
     next(error);

@@ -9,7 +9,7 @@
     {{error}}
 </div>
 {{/if}}
-<form action="/wristwonders/members/profile/update-profile" method="POST">
+<form action="/wristwonders/members/profile/update-profile" method="PUT">
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" value="{{member.name}}" required min="1">
     <p class="text-danger">{{error.name}}</p>

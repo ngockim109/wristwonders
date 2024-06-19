@@ -6,6 +6,8 @@ import { engine } from "express-handlebars";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errorHandler.middleware";
 import path from "path";
+import methodOverride from "method-override";
+
 const app = express();
 
 const StartServer = () => {
@@ -13,6 +15,7 @@ const StartServer = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(express.static("public"));
+  app.use(methodOverride("_method"));
 
   // cookie
   app.use(cookieParser());
@@ -28,6 +31,10 @@ const StartServer = () => {
         isString: function (value) {
           return typeof value === "string";
         }
+      },
+      runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true
       }
     })
   );
