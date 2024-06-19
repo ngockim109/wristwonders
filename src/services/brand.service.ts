@@ -19,17 +19,27 @@ class BrandService {
     }
   }
   static async updateBrand(id, brandName) {
-    const updatedBrand = await Brand.findByIdAndUpdate(
-      id,
-      { brandName },
-      { new: true }
-    );
-    return updatedBrand;
+    const existingBrand = await Brand.findOne({ brandName });
+    if (existingBrand) {
+      return { error: "Brand name already exists!" };
+    } else {
+      const updatedBrand = await Brand.findByIdAndUpdate(
+        id,
+        { brandName },
+        { new: true }
+      );
+      return { brand: updatedBrand };
+    }
   }
 
-  static async deleteBrand(id) {
-    const deletedBrand = await Brand.findByIdAndDelete(id);
-    return deletedBrand;
+  static async deleteBrand(id: string) {
+    const existingBrand = await Brand.findById(id);
+    if (existingBrand) {
+      const deletedBrand = await Brand.findByIdAndDelete(id);
+      return { brand: deletedBrand };
+    } else {
+      return { error: "Brand does not exists!" };
+    }
   }
 }
 

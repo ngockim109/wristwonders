@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { IMember } from "../interfaces/member.interface";
 import { ACCESS_TOKEN_EXPIRATION } from "../utils/jwt";
 import MemberService from "../services/member.service";
-import { Unauthenticated } from "../errors/unauthenticatedEror";
+import { Unauthenticated } from "../errors/unauthenticatedError";
 
 // Member register account
 const createMember = async (
@@ -142,14 +142,17 @@ const updatePassword = async (
     const memberLocals = res.locals.member;
     const newPassword = req.body.password;
     const oldPassword = req.body.oldPassword;
+    const confirmPassword = req.body.confirmPassword;
 
     const updateMember = await MemberService.updatePasswordHandler(
       memberLocals._id,
       oldPassword,
-      newPassword
+      newPassword,
+      confirmPassword
     );
     const { membername, name, YOB } = memberLocals;
     const newMember = { membername, name, YOB };
+    res.clearCookie("access_token");
     if (updateMember) {
       res.render("members/profile/update_password", {
         member: newMember,

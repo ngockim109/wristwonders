@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { config } from "../config/dotenv.config";
 import Member from "../models/member.model";
-import { Unauthenticated } from "../errors/unauthenticatedEror";
+import { Unauthenticated } from "../errors/unauthenticatedError";
 
 export const requireAuth = (
   req: Request,

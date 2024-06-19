@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { Unauthenticated } from "../errors/unauthenticatedEror";
+import { Unauthenticated } from "../errors/unauthenticatedError";
+import { Unauthorized } from "../errors/unauthorizedError";
 
 // Middleware to ensure authorization
 export const requireAuthor = (roles: boolean[]) => {
@@ -13,7 +14,7 @@ export const requireAuthor = (roles: boolean[]) => {
       next(new Unauthenticated());
     } else {
       if (!roles.includes(loggedInMember.isAdmin)) {
-        next(new Unauthenticated());
+        next(new Unauthorized());
       }
     }
     next();

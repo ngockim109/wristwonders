@@ -28,25 +28,24 @@ export default class MemberService {
     }
     // Check if membername already exists
     const existingMember: IMember = await Member.findOne({
-      membername: member.membername,
-      YOB: yob
+      membername: member.membername
     });
 
     if (existingMember) {
       throw new BadRequestError("Membername already exists!", {
-        member: existingMember
+        member: member
       });
+    } else {
+      // Create a new member instance
+      const newMember = new Member(member);
+
+      // Save the member to the database
+      const mem = await newMember.save();
+
+      // Save token
+      const token = createAccessToken({ member_id: mem._id });
+      return token;
     }
-
-    // Create a new member instance
-    const newMember = new Member(member);
-
-    // Save the member to the database
-    const mem = await newMember.save();
-
-    // Save token
-    const token = createAccessToken({ member_id: mem._id });
-    return token;
   }
   static async updateProfileHandler(
     memberId: string,
@@ -70,8 +69,20 @@ export default class MemberService {
   static async updatePasswordHandler(
     memberId: string,
     oldPassword: string,
-    newPassword: string
+    newPassword: string,
+    confirmPassword: string
   ) {
+    if (oldPassword === newPassword) {
+      throw new BadRequestError(
+        "Your new password must be different from the old one!"
+      );
+    }
+    if (newPassword !== confirmPassword) {
+      throw new BadRequestError(
+        "The new password and confirmation password do not match!"
+      );
+    }
+
     const member = await Member.findById(memberId);
     const { membername, name, YOB } = member;
     const newMember = { membername, name, YOB };

@@ -9,4 +9,5 @@ export interface IMember {
   _id?: Types.ObjectId | string;
   createdAt?: Date;
   updatedAt?: Date;
+  __v?: number;
 }

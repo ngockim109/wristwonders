@@ -45,10 +45,10 @@ const updateBrand = async (req, res, next) => {
   const { brandName } = req.body;
   try {
     const updatedBrand = await BrandService.updateBrand(id, brandName);
-    if (!updatedBrand) {
+    if (updatedBrand.error) {
       return res.render("brands/brand_management", {
         title: "Brands",
-        error: "Brand not found!",
+        error: updatedBrand?.error,
         brands: await BrandService.getAllBrands()
       });
     } else {
@@ -69,10 +69,10 @@ const deleteBrand = async (req, res, next) => {
   const { id } = req.params;
   try {
     const deletedBrand = await BrandService.deleteBrand(id);
-    if (!deletedBrand) {
+    if (deletedBrand.error) {
       return res.render("brands/brand_management", {
         title: "Brands",
-        error: "Brand not found!",
+        error: deletedBrand.error,
         brands: await BrandService.getAllBrands()
       });
     } else {

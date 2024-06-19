@@ -7,6 +7,9 @@ export const updatePasswordSchema = z.object({
       .min(8, { message: "Password must be greater than 8 characters!" }),
     oldPassword: z
       .string({ description: "Password is required" })
+      .min(8, { message: "Password must be greater than 8 characters!" }),
+    confirmPassword: z
+      .string({ description: "Password is required" })
       .min(8, { message: "Password must be greater than 8 characters!" })
   })
 });

@@ -1,10 +1,11 @@
 import { ErrorRequestHandler } from "express";
 import { GlobalError } from "../errors/globalError";
 import { ValidationError } from "../errors/validationError";
-import { Unauthenticated } from "../errors/unauthenticatedEror";
+import { Unauthenticated } from "../errors/unauthenticatedError";
 import { Unauthorized } from "../errors/unauthorizedError";
 import { BadRequestError } from "../errors/badRequestError";
 import { NotFoundError } from "../errors/notFoundError";
+import { IMember } from "../interfaces/member.interface";
 
 const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   const transformToTitleCase = (text: string) => {
@@ -33,29 +34,33 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   // Transform the title and originalUrl based on req.url
   const title = getTitleFromUrl(req.url);
   const originalUrl = getOriginalUrl(req.url);
-  const member = res.locals.member;
-  const {
-    membername,
-    YOB,
-    name,
-    _id,
-    password,
-    isAdmin,
-    createdAt,
-    updatedAt,
-    __v
-  } = member;
-  const newMember = {
-    membername,
-    YOB,
-    name,
-    _id,
-    password,
-    isAdmin,
-    createdAt,
-    updatedAt,
-    __v
-  };
+  let newMember: IMember;
+  if (res.locals.member) {
+    const member = res.locals.member;
+    const {
+      membername,
+      YOB,
+      name,
+      _id,
+      password,
+      isAdmin,
+      createdAt,
+      updatedAt,
+      __v
+    } = member;
+    newMember = {
+      membername,
+      YOB,
+      name,
+      _id,
+      password,
+      isAdmin,
+      createdAt,
+      updatedAt,
+      __v
+    };
+  }
+
   if (error instanceof GlobalError) {
     // Handle validation errors
     if (error instanceof ValidationError) {
