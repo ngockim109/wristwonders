@@ -1,0 +1,33 @@
+<div class="container mt-5">
+    <h1>Brand Details</h1>
+
+    {{#if message}}
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+    {{/if}}
+
+    {{#if error}}
+    <div class="alert alert-danger" role="alert">
+        {{error}}
+    </div>
+    {{/if}}
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Brand Name: {{brand.brandName}}</h5>
+            <p class="card-text">Created At: {{formatDate brand.createdAt}}</p>
+            <p class="card-text">Updated At: {{formatDate brand.updatedAt}}</p>
+            <p class="card-text">ID: {{brand._id}}</p>
+            <button type="button" class="btn btn-primary" data-toggle="modal"
+                data-target="#updateBrandModal-{{brand._id}}">
+                Update
+            </button>
+            <button type="button" class="btn btn-danger" data-toggle="modal"
+                data-target="#deleteBrandModal-{{brand._id}}">
+                Delete
+            </button>
+        </div>
+    </div>
+    {{> brand_update}} {{> brand_delete}}
+</div>

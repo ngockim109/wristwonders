@@ -25,7 +25,7 @@ class BrandService {
       return { brand: newBrand };
     }
   }
-  static async updateBrand(id, brandName) {
+  static async updateBrand(id: string, brandName: string) {
     const brand = await Brand.findById(id);
     if (brand.brandName === brandName) {
       return {

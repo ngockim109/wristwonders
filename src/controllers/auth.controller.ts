@@ -21,7 +21,6 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       res.redirect("/wristwonders");
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

@@ -35,7 +35,7 @@ export default class UserService {
       // Save the user to the database
       return await newUser.save();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 }

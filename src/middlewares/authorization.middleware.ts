@@ -5,9 +5,6 @@ import { Unauthorized } from "../errors/unauthorizedError";
 // Middleware to ensure authorization
 export const requireAuthor = (roles: boolean[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    console.log("requireAuthor middleware called");
-    console.log("Roles required:", roles);
-    console.log("Member in res.locals:", res.locals.member);
     const loggedInMember = res.locals.member;
     // Check if there is a logged-in user
     if (!loggedInMember) {

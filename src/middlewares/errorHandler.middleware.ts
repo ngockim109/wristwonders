@@ -64,14 +64,9 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   if (error instanceof GlobalError) {
     // Handle validation errors
     if (error instanceof ValidationError) {
-      // const originalUrl = req.url.split("/").slice(2).join("/");
-      // const lastString = req.url.substring(req.url.lastIndexOf("/") + 1);
-      // const title = lastString.charAt(0).toUpperCase() + lastString.slice(1);
-      console.log(title, originalUrl);
       const data =
         error.data && typeof error.data === "object" ? error.data : {};
-      // console.log(data);
-      console.log(error.errors);
+      console.error(error.errors);
       return res.render(originalUrl, {
         title: title,
         member: newMember,
@@ -95,10 +90,7 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
     if (error instanceof BadRequestError) {
       const data =
         error.data && typeof error.data === "object" ? error.data : {};
-
-      // console.log(data);
-      console.log("message", error.message);
-      console.log("error", error);
+      console.error("error", error);
 
       return res.render(originalUrl, {
         title: title,
@@ -115,7 +107,7 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   }
 
   // Handle server errors
-  console.log(`Path: ${req.path}`, error);
+  console.error(`Path: ${req.path}`, error);
   return res.redirect("/wristwonders/error/500");
 };
 export default errorHandler;

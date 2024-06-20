@@ -1,0 +1,25 @@
+<div class="modal fade" id="deleteBrandModal-{{brand._id}}" tabindex="-1"
+    aria-labelledby="deleteBrandModalLabel-{{brand._id}}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteBrandModalLabel-{{brand._id}}">Delete Brand</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure want to delete brand?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="close btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">Cancel</span>
+                </button>
+                <form action="/wristwonders/brands/{{brand._id}}?_method=DELETE" method="POST">
+                    <input type="hidden" id="brand_detail" name="brand_detail" value="detail">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

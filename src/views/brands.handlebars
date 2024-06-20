@@ -1,0 +1,25 @@
+{{> header}}
+<h1>Brand Management</h1>
+
+{{#if (isString message)}}
+<div class="alert alert-success" role="alert">
+    {{message}}
+</div>
+{{/if}}
+
+{{#if (isString error)}}
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
+{{/if}}
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createBrandModal">
+    Create Brand
+</button>
+
+<!-- Create brand Modal -->
+{{> brand_create}}
+
+<!-- List all brands -->
+{{> brand_list}}
+{{> bottom}}

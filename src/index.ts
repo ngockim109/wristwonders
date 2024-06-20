@@ -47,8 +47,6 @@ const StartServer = () => {
   // Static files
   app.use(express.static(path.join(__dirname, "public")));
 
-  // Routes
-  console.log("Views directory:", app.get("views"));
   // main route
   app.use("/wristwonders", router);
   app.use(errorHandler);
@@ -63,7 +61,6 @@ const StartServer = () => {
 mongoose
   .connect(config.mongo_uri, { retryWrites: true, w: "majority" })
   .then(() => {
-    console.log("Connected to Mongo");
     StartServer();
   })
   .catch((error) => console.error(error));
