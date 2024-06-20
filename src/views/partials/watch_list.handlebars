@@ -1,0 +1,163 @@
+<div class="mt-4 px-3">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Watch Id</th>
+                <th scope="col">Watch Name</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Price</th>
+                <th scope="col" class="d-flex justify-content-center">Automatic</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Updated Date</th>
+                <th scope="col" class="d-flex gap-3 justify-content-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#if (isEmpty watches)}}
+            <tr>
+                <td colspan="8" class="centered-container">
+                    <div class="img-container">
+                        <img src="/images/empty.png" alt="Empty data" class="img">
+                    </div>
+                </td>
+            </tr>
+
+            {{/if}}
+            {{#each watches}}
+            <tr>
+                <td>{{this._id}}</td>
+                <td>{{this.watchName}}</td>
+                <td>{{toUpperCase this.brand.brandName}}</td>
+                <td>
+                    <div class="d-flex justify-content-start w-100 h-100">{{this.price}}</div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center w-100 h-100">
+                        {{#if this.automatic}}
+                        <span class="badge badge-danger rounded-pill text-bg-danger">Automatic</span>
+                        {{else}}
+                        <span class="badge badge-secondary rounded-pill text-bg-info">Non-Automatic</span>
+                        {{/if}}
+                    </div>
+                </td>
+                <td>{{formatDate this.createdAt}}</td>
+                <td>{{formatDate this.updatedAt}}</td>
+                <td class="d-flex gap-3">
+                    <div class="d-flex gap-3 justify-content-center w-100 h-100">
+                        <button type="button" class="btn bg-custom">
+                            <a href="/wristwonders/watches/{{this._id}}" class="text-white text-decoration-none"><i
+                                    class="bi bi-eye d-flex justify-content-center align-items-center text-dark"></i></a>
+                        </button>
+                        <button type="button" class="btn bg-custom " data-toggle="modal"
+                            data-target="#updateWatchModal-{{this._id}}">
+                            <i class="bi bi-pencil-square d-flex justify-content-center align-items-center"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                            data-target="#deleteWatchModal-{{this._id}}">
+                            <i class="bi bi-trash d-flex justify-content-center align-items-center"></i>
+                        </button>
+
+                    </div>
+                </td>
+            </tr>
+            {{!-- Update watch --}}
+            <div class="modal fade" id="updateWatchModal-{{this._id}}" tabindex="-1"
+                aria-labelledby="updateWatchModalLabel-{{this._id}}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateWatchModalLabel-{{this._id}}">Update Watch</h5>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="/wristwonders/watches/{{this._id}}?_method=PUT" method="post">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="watchName" class="form-label">Watch Name</label>
+                                    <input type="text" class="form-control" id="watchName" name="watchName"
+                                        value="{{this.watchName}}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Image URL</label>
+                                    <input type="text" class="form-control" id="image" name="image"
+                                        value="{{this.image}}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="price" class="form-label">Price</label>
+                                    <input step="any" type="number" class="form-control" id="price" name="price"
+                                        value="{{this.price}}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="automatic" class="form-label">Automatic</label>
+                                    <select class="form-select" id="automatic" name="automatic">
+                                        <option value="{{this.automatic}}" disabled selected hidden>
+                                            {{formatWatchAutomatic
+                                            this.automatic}}</option>
+                                        <option value="false">No
+                                        </option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="watchDescription" class="form-label">Watch Description</label>
+                                    <textarea class="form-control" id="watchDescription" name="watchDescription"
+                                        rows="3" required>{{this.watchDescription}}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="hidden" id="brandId" name="brandId" value="{{this.brand._id}}">
+                                    <label for="brand" class="form-label">Brand</label>
+                                    <select class="form-select" id="brandName" name="brandName" required>
+                                        <option value="" disabled selected hidden>{{this.brand.brandName}}</option>
+                                        {{!-- {{#each brands}}
+                                        <option value="{{this._id}}">{{this.brandName}}</option>
+                                        {{/each}} --}}
+                                        <option value="6672466b50ad29c861d58618">Rolex</option>
+                                        <option value="667249cca645656f5f822905">Patek Philippe</option>
+                                        <option value="66724a5204124588f651789d">Rose Gold</option>
+                                        <option value="6673bfe4716afafc13cccf96">Cartier</option>
+                                        <option value="6673c951716afafc13cccfd2">Carl Suchy & Söhne</option>
+                                        <option value="6673cb96716afafc13ccd00b">Ball Watch</option>
+                                        <option value="6674282bebe4f17a7ce4766e">Omega</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="deleteWatchModal-{{this._id}}" tabindex="-1"
+                aria-labelledby="deleteWatchModalLabel-{{this._id}}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteWatchModalLabel-{{this._id}}">Delete Watch</h5>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure want to delete watch?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="close btn btn-secondary" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">Cancel</span>
+                            </button>
+                            <form action="/wristwonders/watches/{{this._id}}?_method=DELETE" method="POST">
+                                <input type="hidden" id="watch_detail" name="watch_detail" value="detail">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </tbody>
+    </table>
+
+</div>

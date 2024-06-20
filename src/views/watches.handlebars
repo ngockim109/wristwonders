@@ -4,33 +4,32 @@
     <div class="main-content" id="admin-layout">
         {{> admin_navbar}}
         <div>
-            <h2 class="px-3 pt-3">Brand Management</h2>
+            <h2 class="px-3 pt-3">Watch Management</h2>
 
-            {{#if (isString message)}}
+            {{#if message}}
             <div class="alert alert-success" role="alert">
                 {{message}}
             </div>
             {{/if}}
 
-            {{#if (isString error)}}
+            {{#if error}}
             <div class="alert alert-danger" role="alert">
                 {{error}}
             </div>
             {{/if}}
             <div class="d-flex justify-content-end px-4">
-                <button type="button" class="btn btn-dark fw-bold" data-toggle="modal" data-target="#createBrandModal">
-                    Create Brand
+                <button type="button" class="btn btn-dark fw-bold" data-toggle="modal" data-target="#createWatchModal">
+                    Create Watch
                 </button>
             </div>
 
-            <!-- Create brand Modal -->
-            {{> brand_create}}
+            <!-- List watches -->
+            {{> watch_list}}
 
-            <!-- List all brands -->
-            {{> brand_list}}
+            <!-- Create Watch Modal -->
+            {{> watch_create}}
         </div>
         {{> footer}}
     </div>
 </div>
-
 {{> bottom}}

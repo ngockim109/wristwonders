@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import BrandService from "../services/brand.service";
+import { BadRequestError } from "../errors/badRequestError";
 
 const getAllBrands = async (
   req: Request,
@@ -31,7 +32,16 @@ const getBrand = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
   } catch (error) {
-    console.error(error);
+    if (error instanceof BadRequestError) {
+      return res.render("brands/brand_detail", {
+        title: "Brand not found",
+        member: res.locals.member,
+        brand: null,
+        layout: false
+      });
+    } else {
+      console.error(error);
+    }
   }
 };
 

@@ -1,0 +1,47 @@
+{{> header}}
+<div class="d-flex w-100">
+    {{> admin_sidebar}}
+    <div class="main-content" id="admin-layout">
+        {{> admin_navbar}}
+        {{#if member}}
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-header bg-custom text-black d-flex gap-2">
+                    <h2 class="mb-0">Profile Information</h2>
+                    <button type="button" class="btn bg-secondary me-2 fw-bold">
+                        <a href="/wristwonders/members/profile/update-profile" class="text-decoration-none text-light">
+                            <i class="bi bi-pencil-square d-flex justify-content-center align-items-center"></i>
+                        </a>
+                    </button>
+                    <button type="button" class="btn bg-secondary me-2 fw-bold">
+                        <a href="/wristwonders/members/profile/update-password" class="text-decoration-none text-light">
+                            Change Password</a>
+                    </button>
+                </div>
+                <div class="card-body">
+                    {{#if member}}
+                    <div class="mb-3">
+                        <p class="fw-bold">Username: <span class="fw-normal">{{member.membername}}</span></p>
+                    </div>
+                    <div class="mb-3">
+                        <p class="fw-bold">Name: <span class="fw-normal">{{member.name}}</span></p>
+                    </div>
+                    <div class="mb-3">
+                        <p class="fw-bold">Year of Birth: <span class="fw-normal">{{member.YOB}}</span></p>
+                    </div>
+                    {{else}}
+                    <p class="text-danger">Member not found.</p>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+
+        {{else}}
+        <div class="img-container my-auto">
+            <img src="/images/empty.png" alt="Empty data" class="img">
+        </div>
+        {{/if}}
+        {{> footer}}
+    </div>
+</div>
+{{> bottom}}

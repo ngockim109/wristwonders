@@ -11,7 +11,7 @@ const watchSchema = new mongoose.Schema(
     comments: [commentSchema],
     brand: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Brands",
+      ref: "Brand",
       required: true
     }
   },

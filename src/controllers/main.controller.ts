@@ -5,9 +5,8 @@ const getHomePage = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const watches = await WatchService.getAllWatchHandler();
     if (res.locals.member) {
-      const { membername, name, YOB } = res.locals.member;
-      const newMember = { membername, name, YOB };
-
+      const { membername, name, YOB, isAdmin } = res.locals.member;
+      const newMember = { membername, name, YOB, isAdmin };
       res.render("home", {
         title: "WristWonders",
         member: newMember,

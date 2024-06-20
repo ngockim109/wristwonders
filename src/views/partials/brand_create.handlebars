@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createBrandModalLabel">Create New Brand</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -14,7 +14,12 @@
                         <input type="text" class="form-control" id="brandName" name="brandName" required>
                         <small class="form-text text-danger">{{error.brandName}}</small>
                     </div>
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">Cancel</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
                 </form>
             </div>
         </div>

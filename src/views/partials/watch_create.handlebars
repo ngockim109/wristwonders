@@ -1,0 +1,55 @@
+<div class="modal fade" id="createWatchModal" tabindex="-1" aria-labelledby="createWatchModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createWatchModalLabel">Create Watch</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/wristwonders/watches" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="watchName" class="form-label">Watch Name</label>
+                        <input type="text" class="form-control" id="watchName" name="watchName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image URL</label>
+                        <input type="url" class="form-control" id="image" name="image" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="price" name="price" step="any" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="automatic" class="form-label">Automatic</label>
+                        <select class="form-select" id="automatic" name="automatic">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="watchDescription" class="form-label">Watch Description</label>
+                        <textarea class="form-control" id="watchDescription" name="watchDescription" rows="3"
+                            required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="brand" class="form-label">Brand</label>
+                        <select class="form-select" id="brand" name="brand" required>
+                            <option value="" disabled selected hidden>Select brand</option>
+                            {{#each brands}}
+                            <option value="{{this._id}}">{{this.brandName}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">Cancel</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

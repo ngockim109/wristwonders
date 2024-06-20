@@ -67,6 +67,14 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
       const data =
         error.data && typeof error.data === "object" ? error.data : {};
       console.error(error.errors);
+      if (originalUrl === "accounts/accounts") {
+        return res.render("accounts", {
+          title: title,
+          member: newMember,
+          error: error.errors,
+          ...data
+        });
+      }
       return res.render(originalUrl, {
         title: title,
         member: newMember,

@@ -34,6 +34,15 @@ const StartServer = () => {
         },
         formatDate: function (date) {
           return moment(date).format("DD/MM/YYYY");
+        },
+        isEmpty: function (value) {
+          return !value || (Array.isArray(value) && value.length === 0);
+        },
+        toUpperCase: function (str) {
+          return str.toUpperCase();
+        },
+        formatWatchAutomatic: function (option: boolean) {
+          return option ? "Yes" : "No";
         }
       },
       runtimeOptions: {

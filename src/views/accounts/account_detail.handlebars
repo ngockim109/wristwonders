@@ -1,0 +1,67 @@
+{{> header}}
+<div class="d-flex w-100">
+    {{> admin_sidebar}}
+    <div class="main-content" id="admin-layout">
+        {{> admin_navbar}}
+        {{#if (isEmpty user)}}
+
+        <div class="img-container my-auto">
+            <img src="/images/empty.png" alt="Empty data" class="img">
+        </div>
+
+        {{else}}
+        <div>
+            <div class="container mt-4">
+                <div class="d-flex align-items-center gap-2">
+                    <h2>{{user.name}}</h2>
+                    <div>
+                        {{!-- <button type="button" class="btn bg-custom me-2" data-bs-toggle="modal"
+                            data-bs-target="#updateWatchModal">
+                            <i class="bi bi-pencil-square d-flex justify-content-center align-items-center"></i>
+                        </button> --}}
+                    </div>
+                </div>
+
+                {{#if (isString message)}}
+                <div class="alert alert-success" role="alert">
+                    {{message}}
+                </div>
+                {{/if}}
+
+                {{#if (isString error)}}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <div class="card">
+                    <div class="card-header">
+                        Account Information
+                    </div>
+                    <div class="card-body d-flex gap-4">
+                        {{!-- <div class="img-watch-admin-container">
+                            <img src="{{user.image}}" alt="{{user.membername}}" class="img-watch-admin">
+                        </div> --}}
+                        <div>
+                            <p class="card-text">
+                                <strong>Membername:</strong> {{user.membername}}<br>
+                                <strong>Member Id:</strong> {{user._id}}<br>
+                                <strong>Year of birth:</strong> {{user.YOB}}<br>
+                                <strong>Role:</strong> {{#if this.isAdmin}}
+                                <span class="badge badge-primary rounded-pill text-bg-danger">Admin</span>
+                                {{else}}
+                                <span class="badge badge-info rounded-pill text-bg-info">Member</span>
+                                {{/if}}<br>
+                                <strong>Joined Date:</strong> {{formatDate user.createdAt}}<br>
+                                <strong>Updated Date:</strong> {{formatDate user.updatedAt}}<br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        {{> footer}}
+    </div>
+</div>
+{{> bottom}}

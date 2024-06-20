@@ -59,9 +59,31 @@ const getMember = async (req: Request, res: Response, next: NextFunction) => {
     const member: IMember = await MemberService.getMemberHandler(
       memberLocals._id
     );
-    const { membername, name, YOB } = member;
-    const newMember = { membername, name, YOB };
+    const { membername, name, YOB, isAdmin } = member;
+    const newMember = { membername, name, YOB, isAdmin };
     res.render("members/profile", { member: newMember, title: "Profile" });
+  } catch (error) {
+    next(error);
+  }
+};
+// Get admin from locals but just get membername, name, YOB
+const getAdminProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const memberLocals = res.locals.member;
+    const member: IMember = await MemberService.getMemberHandler(
+      memberLocals._id
+    );
+    const { membername, name, YOB, isAdmin } = member;
+    const newMember = { membername, name, YOB, isAdmin };
+    res.render("admin/profile", {
+      member: newMember,
+      title: "Profile",
+      layout: false
+    });
   } catch (error) {
     next(error);
   }
@@ -71,8 +93,8 @@ const getMember = async (req: Request, res: Response, next: NextFunction) => {
 const getUpdateProfile = (req: Request, res: Response, next: NextFunction) => {
   try {
     if (res.locals.member) {
-      const { membername, name, YOB } = res.locals.member;
-      const newMember = { membername, name, YOB };
+      const { membername, name, YOB, isAdmin } = res.locals.member;
+      const newMember = { membername, name, YOB, isAdmin };
       res.render("members/profile/update_profile", {
         title: "Update profile",
         member: newMember
@@ -101,8 +123,8 @@ const updateProfile = async (
       memberLocals._id,
       updateData
     );
-    const { membername, name, YOB } = updatedMember;
-    const newMember = { membername, name, YOB };
+    const { membername, name, YOB, isAdmin } = updatedMember;
+    const newMember = { membername, name, YOB, isAdmin };
     if (updatedMember) {
       res.render("members/profile/update_profile", {
         member: newMember,
@@ -119,8 +141,8 @@ const updateProfile = async (
 const getUpdatePassword = (req: Request, res: Response, next: NextFunction) => {
   try {
     if (res.locals.member) {
-      const { membername, name, YOB } = res.locals.member;
-      const newMember = { membername, name, YOB };
+      const { membername, name, YOB, isAdmin } = res.locals.member;
+      const newMember = { membername, name, YOB, isAdmin };
       res.render("members/profile/update_password", {
         title: "Change password",
         member: newMember
@@ -150,8 +172,8 @@ const updatePassword = async (
       newPassword,
       confirmPassword
     );
-    const { membername, name, YOB } = memberLocals;
-    const newMember = { membername, name, YOB };
+    const { membername, name, YOB, isAdmin } = memberLocals;
+    const newMember = { membername, name, YOB, isAdmin };
     res.clearCookie("access_token");
     if (updateMember) {
       res.render("members/profile/update_password", {
@@ -172,5 +194,6 @@ export default {
   updateProfile,
   updatePassword,
   getUpdateProfile,
-  getUpdatePassword
+  getUpdatePassword,
+  getAdminProfile
 };

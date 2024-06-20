@@ -10,4 +10,125 @@ body {
   font-optical-sizing: auto;
   font-weight: <weight>;
   font-style: normal;
+  min-height: 100vh;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+#admin-layout {
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fc;
+  min-height: 100vh;
+}
+#footer {
+  background-color: #dfddd2;
+  color: black;
+  padding: 1.25rem;
+  text-align: center;
+  margin-top: auto;
+}
+
+.main-content {
+  width: 85%;
+}
+/* Custom CSS for sidebar */
+.sidebar {
+  width: 15%;
+  background: #212529;
+}
+.admin-navbar {
+  background: #dfddd2;
+}
+#sidebar {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+}
+
+.sidebar-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.nav-link:hover {
+  background-color: #dfddd2;
+  color: black;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.search-input {
+  width: 500px;
+  border-radius: 10px 0 0 10px;
+}
+
+.search-input:focus {
+  border: #dfddd2;
+  box-shadow: 0 0 10px rgba(223, 221, 210, 0.7);
+}
+
+.btn-search {
+  border-radius: 0 10px 10px 0;
+  background: white;
+  color: black;
+  border: grey;
+}
+
+.btn-search:hover {
+  background: #dfddd2;
+  color: black;
+  border: grey;
+  box-shadow: 0 0 10px rgba(223, 221, 210, 0.7);
+}
+
+.nav-item:hover a {
+  color: black !important;
+}
+
+.nav-link {
+  border-radius: 1px;
+}
+.img-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.img-container img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+.badge-danger {
+  background: #dc3545;
+}
+
+.badge-secondary {
+  background: #6c757d;
+}
+.badge-primary {
+  background: #0d6efd;
+}
+.badge-info {
+  background: #0dcaf0;
+}
+
+.bg-custom {
+  background: #dfddd2;
+}
+
+.bg-custom:hover {
+  opacity: 0.8;
+}
+
+.img-watch-admin {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
 }

@@ -1,33 +1,59 @@
-<div class="container mt-5">
-    <h1>Brand Details</h1>
+{{> header}}
+<div class="d-flex w-100">
+    {{> admin_sidebar}}
+    <div class="main-content" id="admin-layout">
+        {{> admin_navbar}}
+        {{#if (isEmpty brand)}}
 
-    {{#if message}}
-    <div class="alert alert-success" role="alert">
-        {{message}}
-    </div>
-    {{/if}}
-
-    {{#if error}}
-    <div class="alert alert-danger" role="alert">
-        {{error}}
-    </div>
-    {{/if}}
-
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">Brand Name: {{brand.brandName}}</h5>
-            <p class="card-text">Created At: {{formatDate brand.createdAt}}</p>
-            <p class="card-text">Updated At: {{formatDate brand.updatedAt}}</p>
-            <p class="card-text">ID: {{brand._id}}</p>
-            <button type="button" class="btn btn-primary" data-toggle="modal"
-                data-target="#updateBrandModal-{{brand._id}}">
-                Update
-            </button>
-            <button type="button" class="btn btn-danger" data-toggle="modal"
-                data-target="#deleteBrandModal-{{brand._id}}">
-                Delete
-            </button>
+        <div class="img-container my-auto">
+            <img src="/images/empty.png" alt="Empty data" class="img">
         </div>
+
+        {{else}}
+        <div>
+            <div class="container mt-5">
+
+                <div class="d-flex align-items-center gap-2">
+                    <h2>Brand Details</h2>
+                    <button type="button" class="btn bg-custom me-2" data-bs-toggle="modal"
+                        data-bs-target="#updateBrandModal-{{brand._id}}">
+                        <i class="bi bi-pencil-square d-flex justify-content-center align-items-center"></i>
+                    </button>
+                </div>
+                {{#if message}}
+                <div class="alert alert-success" role="alert">
+                    {{message}}
+                </div>
+                {{/if}}
+
+                {{#if error}}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Brand Name: {{brand.brandName}}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">ID: {{brand._id}}</p>
+                        <p class="card-text">Created At: {{formatDate brand.createdAt}}</p>
+                        <p class="card-text">Updated At: {{formatDate brand.updatedAt}}</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="button" class="btn btn-danger d-flex justify-content-center align-items-center gap-2"
+                        data-toggle="modal" data-target="#deleteBrandModal-{{brand._id}}">
+                        <i class="bi bi-trash d-flex justify-content-center align-items-center"></i>
+                        Delete
+                    </button>
+                </div>
+                {{> brand_update}} {{> brand_delete}}
+            </div>
+        </div>
+        {{/if}}
+        {{> footer}}
     </div>
-    {{> brand_update}} {{> brand_delete}}
 </div>
+{{> bottom}}

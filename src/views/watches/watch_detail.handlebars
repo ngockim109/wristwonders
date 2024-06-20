@@ -1,0 +1,81 @@
+{{> header}}
+<div class="d-flex w-100">
+    {{> admin_sidebar}}
+    <div class="main-content" id="admin-layout">
+        {{> admin_navbar}}
+        {{#if (isEmpty watch)}}
+
+        <div class="img-container my-auto">
+            <img src="/images/empty.png" alt="Empty data" class="img">
+        </div>
+
+        {{else}}
+        <div>
+            <div class="container mt-4">
+                <div class="d-flex align-items-center gap-2">
+                    <h2>{{watch.watchName}}</h2>
+                    <div>
+                        <button type="button" class="btn bg-custom me-2" data-bs-toggle="modal"
+                            data-bs-target="#updateWatchModal">
+                            <i class="bi bi-pencil-square d-flex justify-content-center align-items-center"></i>
+                        </button>
+                    </div>
+                </div>
+
+                {{#if (isString message)}}
+                <div class="alert alert-success" role="alert">
+                    {{message}}
+                </div>
+                {{/if}}
+
+                {{#if (isString error)}}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div>
+                {{/if}}
+
+                <div class="card">
+                    <div class="card-header">
+                        Watch Information
+                    </div>
+                    <div class="card-body d-flex gap-4">
+                        <div class="img-watch-admin-container">
+                            <img src="{{watch.image}}" alt="{{watch.watchName}}" class="img-watch-admin">
+                        </div>
+                        <div>
+                            <p class="card-text">
+                                <strong>Brand:</strong> {{watch.brand.brandName}}<br>
+                                <strong>Price:</strong> ${{watch.price}}<br>
+                                <strong>Automatic:</strong> {{#if watch.automatic}}<span
+                                    class="badge badge-danger rounded-pill text-bg-danger">Automatic</span>
+                                {{else}}
+                                <span
+                                    class="badge badge-secondary rounded-pill text-bg-info">Non-Automatic</span>{{/if}}<br>
+                                <strong>Description:</strong> {{watch.watchDescription}}<br>
+                                <strong>Created Date:</strong> {{formatDate user.createdAt}}<br>
+                                <strong>Updated Date:</strong> {{formatDate user.updatedAt}}<br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <form action="/watches/{{watch._id}}" method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="button"
+                            class="btn btn-danger d-flex justify-content-center align-items-center gap-2"
+                            data-toggle="modal" data-target="#deleteWatchModal-{{watch._id}}">
+                            <i class="bi bi-trash d-flex justify-content-center align-items-center"></i>
+                            <span> Delete watch</span>
+                        </button>
+                    </form>
+                </div>
+                <!-- Update Watch Modal -->
+                {{> watch_update}}
+                {{> watch_delete}}
+            </div>
+        </div>
+        {{/if}}
+        {{> footer}}
+    </div>
+</div>
+{{> bottom}}

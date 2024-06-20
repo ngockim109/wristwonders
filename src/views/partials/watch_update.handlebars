@@ -1,0 +1,62 @@
+<div class="modal fade" id="updateWatchModal" tabindex="-1" aria-labelledby="updateWatchModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateWatchModalLabel">Update Watch</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/wristwonders/watches/{{watch._id}}?_method=PUT" method="post">
+                <input type="hidden" name="watch_detail" value="detail">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="watchName" class="form-label">Watch Name</label>
+                        <input type="text" class="form-control" id="watchName" name="watchName"
+                            value="{{watch.watchName}}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image URL</label>
+                        <input type="text" class="form-control" id="image" name="image" value="{{watch.image}}"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input step="any" type="number" class="form-control" id="price" name="price"
+                            value="{{watch.price}}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="automatic" class="form-label">Automatic</label>
+                        <select class="form-select" id="automatic" name="automatic">
+                            <option value="{{watch.automatic}}" disabled selected hidden>{{formatWatchAutomatic
+                                watch.automatic}}</option>
+                            <option value="false">No
+                            </option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="watchDescription" class="form-label">Watch Description</label>
+                        <textarea class="form-control" id="watchDescription" name="watchDescription" rows="3"
+                            required>{{watch.watchDescription}}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <input type="hidden" id="brandId" name="brandId" value="{{watch.brand._id}}">
+                        <label for="brand" class="form-label">Brand</label>
+                        <select class="form-select" id="brandName" name="brandName" required>
+                            <option value="" disabled selected hidden>{{watch.brand.brandName}}</option>
+                            {{#each brands}}
+                            <option value="{{this._id}}">{{this.brandName}}</option>
+                            {{/each}}
+
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
