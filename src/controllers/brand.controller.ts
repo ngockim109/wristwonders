@@ -18,6 +18,20 @@ const getAllBrands = async (
     next(error);
   }
 };
+const getBrand = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+  try {
+    const brand = await BrandService.getBrand(id);
+    if (brand) {
+      res.render("brands/brand_management/:id", {
+        brand: brand,
+        title: brand?.brandName ?? "Brands"
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 const createBrand = async (req: Request, res: Response, next: NextFunction) => {
   const { brandName } = req.body;
@@ -91,5 +105,6 @@ export default {
   getAllBrands,
   createBrand,
   updateBrand,
-  deleteBrand
+  deleteBrand,
+  getBrand
 };

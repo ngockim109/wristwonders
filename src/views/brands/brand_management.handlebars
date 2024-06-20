@@ -16,7 +16,7 @@
     Create Brand
 </button>
 
-<!-- Modal -->
+<!-- Create brand Modal -->
 <div class="modal fade" id="createBrandModal" tabindex="-1" aria-labelledby="createBrandModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -45,14 +45,20 @@
     <table class="table table-striped bordered">
         <thead>
             <tr>
+                <th scope="col">Brand Id</th>
                 <th scope="col">Brand Name</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Updated Date</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
             {{#each brands}}
             <tr>
+                <td>{{this._id}}</td>
                 <td>{{this.brandName}}</td>
+                <td>{{formatDate this.createdAt}}</td>
+                <td>{{formatDate this.updatedAt}}</td>
                 <td>
                     <button type="button" class="btn btn-primary" data-toggle="modal"
                         data-target="#updateBrandModal-{{this.id}}">
@@ -78,6 +84,7 @@
                         </div>
                         <div class="modal-body">
                             <form action="/wristwonders/brands/brand-management/{{this._id}}?_method=PUT" method="POST">
+
                                 <div class="form-group">
                                     <label for="updateBrandName-{{this._id}}">New Brand Name:</label>
                                     <input type="text" class="form-control" id="updateBrandName-{{this._id}}"

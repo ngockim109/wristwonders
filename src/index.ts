@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errorHandler.middleware";
 import path from "path";
 import methodOverride from "method-override";
+import moment from "moment";
 
 const app = express();
 
@@ -30,6 +31,9 @@ const StartServer = () => {
       helpers: {
         isString: function (value) {
           return typeof value === "string";
+        },
+        formatDate: function (date) {
+          return moment(date).format("DD/MM/YYYY");
         }
       },
       runtimeOptions: {

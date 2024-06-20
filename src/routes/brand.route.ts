@@ -9,6 +9,11 @@ brandRoute.get(
   requireAuthor([true]),
   brandController.getAllBrands
 );
+brandRoute.get(
+  "/brand-management/:id",
+  requireAuthor([true]),
+  brandController.getBrand
+);
 brandRoute.post(
   "/brand-management",
   requireAuthor([true]),
