@@ -75,6 +75,9 @@ const StartServer = () => {
           return a === b;
         },
         stringCompare: function (a: string, b: string) {
+          if (!a || !b) {
+            return false;
+          }
           console.log(a, b);
           console.log(a === b);
           return a === b;

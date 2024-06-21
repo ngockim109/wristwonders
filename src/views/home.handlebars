@@ -10,28 +10,15 @@
         {{error}}
     </div>
     {{/if}}
-    {{#if message}}
-    {{#each message}}
-    <div class="alert alert-success" role="alert">
-        {{this}}
-    </div>
-    {{/each}}
-    {{/if}}
-    {{#if error}}
-    <div class="alert alert-danger d-flex flex-column" role="alert">
-        {{#each error}}
 
-        {{this}}
-
-        {{/each}}</div>
-    {{/if}}
     <div class="mt-3 w-100 d-flex justify-content-end">
         <form action="/wristwonders/watches/filter" method="GET" class="d-flex gap-2">
             <div class="">
                 <select name="brand" id="brand" class="form-select">
+                    <option value="" {{#if (stringCompare "" ../filterBrandName)}}selected{{/if}}>All Brands</option>
                     {{#each brands}}
-                    {{!-- <option value="" disabled selected hidden>Select brand</option> --}}
-                    <option value="{{this.brandName}}">{{this.brandName}}</option>
+                    <option value="{{this.brandName}}" {{#if (stringCompare this.brandName ../filterBrandName)}}selected
+                        {{/if}}>{{this.brandName}}</option>
                     {{/each}}
                 </select>
             </div>

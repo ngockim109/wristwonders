@@ -70,37 +70,37 @@ const filterWatchesByBrand = async (
   next: NextFunction
 ) => {
   try {
-    const brandName = req.query.brand as string;
+    const filterBrandName = (req.query.brand as string) ?? "";
     const allWatches = await WatchService.getAllWatches();
     const brands = await BrandService.getAllBrands();
-    if (!brandName) {
+    if (!filterBrandName) {
       res.render("home", {
-        allWatches,
+        watches: allWatches,
         brands,
-        brandName,
-        title: "WristWonders",
-        error: "Brand name is required!"
+        filterBrandName,
+        title: "WristWonders"
       });
       // req.flash("error", "Brand name is required");
       // return res.redirect("/wristwonders");
     }
-    const watches = await WatchService.getWatchesByBrand(brandName);
+    const watches = await WatchService.getWatchesByBrand(filterBrandName);
     if (watches.error) {
       res.render("home", {
         watches,
         brands,
-        brandName,
+        filterBrandName,
         title: "WristWonders",
         error: watches.error
       });
       // req.flash("error", watches.error);
       // return res.redirect("/wristwonders");
     }
+    console.log(filterBrandName);
     if (watches.watches) {
       res.render("home", {
         watches: watches.watches,
         brands: brands,
-        brandName: brandName,
+        filterBrandName: filterBrandName,
         title: "WristWonders"
       });
     }
