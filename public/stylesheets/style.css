@@ -132,3 +132,95 @@ a {
   height: 200px;
   object-fit: contain;
 }
+
+.img-watch {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+
+.watch-cards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.watch-cards .watch-card {
+  flex: 0 0 25%;
+  display: flex;
+  justify-content: center;
+}
+
+.watch-cards .watch-card .card {
+  margin-bottom: 1rem;
+}
+
+.watch-cards .watch-card .card:hover {
+  opacity: 0.8;
+}
+
+.img-watch-information {
+  width: 500px;
+  height: 500px;
+  object-fit: contain;
+}
+
+.rating-container {
+  border-radius: 0.2rem;
+}
+
+.rating {
+  border: none;
+  float: left;
+}
+
+.rating > label {
+  color: #90a0a3;
+  float: right;
+}
+
+.rating > label:before {
+  margin: 5px;
+  font-size: 2em;
+  font-family: FontAwesome;
+  content: "\f005";
+  display: inline-block;
+}
+
+.rating > input {
+  display: none;
+}
+
+.rating > input:checked ~ label,
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+  color: #f79426;
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label,
+.rating > input:checked ~ label:hover ~ label {
+  color: #fece31;
+}
+
+.rating_disabled {
+  border: none;
+  float: left;
+}
+
+.rating_disabled > label {
+  color: #90a0a3;
+  float: right;
+}
+
+.rating_disabled > label:before {
+  margin: 5px;
+  font-size: 2em;
+  font-family: FontAwesome;
+  content: "\f005";
+  display: inline-block;
+}
+
+.rating_disabled > input {
+  display: none;
+}

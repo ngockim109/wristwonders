@@ -9,6 +9,7 @@ import brandRoute from "./brand.route";
 import watchRoute from "./watch.route";
 import adminRoute from "./admin.route";
 import accountRoute from "./account.route";
+import commentRoute from "./comment.route";
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.use("/auth", authRoute);
 router.use("/members", memberRoute);
 router.use("/accounts", accountRoute);
 router.use("/admin", adminRoute);
+router.use("/", commentRoute);
 router.use("/brands", brandRoute);
 router.use("/watches", watchRoute);
 router.use("/error", errorRoute);

@@ -20,6 +20,7 @@ const getWatch = async (req, res, next) => {
   const { id } = req.params;
   try {
     const watch = await WatchService.getWatch(id);
+    console.log(watch);
     res.render("watches/watch_detail", {
       watch,
       title: watch?.watchName ?? "Watch",

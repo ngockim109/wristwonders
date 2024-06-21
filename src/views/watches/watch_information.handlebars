@@ -1,0 +1,103 @@
+{{#if (isEmpty watch)}}
+
+<div class="img-container my-auto">
+    <img src="/images/empty.png" alt="Empty data" class="img">
+</div>
+
+{{else}}
+<div>
+    <div class="container mt-4">
+        {{#if (isString message)}}
+        <div class="alert alert-success" role="alert">
+            {{message}}
+        </div>
+        {{/if}}
+
+        {{#if (isString error)}}
+        <div class="alert alert-danger" role="alert">
+            {{error}}
+        </div>
+        {{/if}}
+
+        <div class="">
+            <div class=" d-flex gap-4">
+                <div class="img-watch-admin-container">
+                    <img src="{{watch.image}}" alt="{{watch.watchName}}" class="img-watch-information">
+                </div>
+                <div>
+                    <p class="">
+                    <h4 class="mb-3">{{toUpperCase watch.brand.brandName}}</h4>
+                    <h5 class="d-inline-block me-2 fw-bold">{{watch.watchName}}</h5>
+                    {{#if watch.automatic}}<span class="badge badge-danger rounded-pill text-bg-danger">Automatic</span>
+                    {{else}}
+                    <span class="badge badge-secondary rounded-pill text-bg-info">Non-Automatic</span>{{/if}}
+                    <h4 class="mt-2 fw-bold">${{watch.price}}</h4>
+                    <p class="mt-4">
+                        <strong>Description:</strong> {{watch.watchDescription}}
+                    </p>
+                    </p>
+                </div>
+            </div>
+            {{!-- comment --}}
+            <div class="rating-container mt-5">
+                <h4 class="fw-bold">Member feedbacks</h4>
+                <div class="my-3 bg-custom p-4">
+                    <form action="/wristwonders/watches/collection/{{watch._id}}" method="POST">
+                        <div class="mb-3 d-flex justify-content-center flex-column align-items-center">
+                            <h3>Rating
+                            </h3>
+                            {{!-- <select class="form-select" id="rating" name="rating" required>
+                                <option value="" disabled selected hidden>Choose rating</option>
+                                <option value="1">1 - Poor</option>
+                                <option value="2">2 - Average</option>
+                                <option value="3">3 - Excellent</option>
+                            </select> --}}
+                            {{> star_rating}}
+                        </div>
+                        <div class="mb-2">
+                            <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-dark">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                {{#if watch.comments}}
+                {{!-- Display all comments --}}
+                <ul class="list-group mb-4">
+                    {{#each watch.comments}}
+                    <li class="list-group-item d-flex flex-column">
+                        <div>
+                            <div class="rating_disabled">
+                                <input type="radio" id="star3" name="rating" value="3" disabled {{#if (eq rating
+                                    3)}}checked{{/if}} />
+                                <label class="star" for="star3" title="Excellent" aria-hidden="true"></label>
+                                <input type="radio" id="star2" name="rating" value="2" disabled {{#if (eq rating
+                                    3)}}checked{{/if}} />
+                                <label class="star" for="star2" title="Average" aria-hidden="true"></label>
+                                <input type="radio" id="star1" name="rating" value="1" disabled {{#if (eq rating
+                                    3)}}checked{{/if}} />
+                                <label class="star" for="star1" title="Poor" aria-hidden="true"></label>
+                            </div>
+                        </div>
+                        <div>
+                            <strong>{{author.name}}</strong>
+                            <p>{{content}}</p>
+                        </div>
+                        <small>Posted on {{formatDate createdAt}}</small>
+                    </li>
+                    {{/each}}
+                </ul>
+                {{else}}
+                <div class="d-flex flex-column align-items-center justify-content-center">
+                    <div class="img-container my-auto">
+                        <img src="/images/empty.png" alt="Empty data" class="img">
+                    </div>
+                    <p>No comments yet. Be the first to comment!</p>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}

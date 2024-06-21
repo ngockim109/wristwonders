@@ -27,19 +27,22 @@
                         {{member.membername}}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/wristwonders/members/profile">Profile</a></li>
+                        <li><a class="dropdown-item text-decoration-none text-light "
+                                href="/wristwonders/members/profile">Profile</a></li>
                         {{#if member.isAdmin}}
-                        <li><a class="dropdown-item" href="/wristwonders/brands">Management</a></li>
+                        <li><a class="dropdown-item text-decoration-none text-light "
+                                href="/wristwonders/brands">Management</a></li>
                         {{/if}}
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="/wristwonders/auth/logout">Logout</a></li>
+                        <li><a class="dropdown-item text-decoration-none text-light "
+                                href="/wristwonders/auth/logout">Logout</a></li>
                     </ul>
                 </li>
                 {{else}}
                 <li class="nav-item">
-                    <a class="nav-link" href="/wristwonders/auth/login">Login</a>
+                    <a class="nav-link text-decoration-none text-light " href="/wristwonders/auth/login">Login</a>
                 </li>
                 {{/if}}
             </ul>

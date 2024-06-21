@@ -1,11 +1,20 @@
-<h1>Home</h1>
-<div class="watch-cards">
+<div class="watch-cards my-4">
     {{#each watches}}
     <div class="watch-card">
-        <img src="{{ image }}" alt="{{ watchName }} Image">
-        <h2>{{ watchName }}</h2>
-        <p>Brand: {{ brand.name }}</p>
-        <a href="/watches/{{ _id }}">View Details</a>
+        <div class="card">
+            <a href="/wristwonders/watches/collection/{{ this._id }}" class="text-decoration-none text-dark">
+                <div class="img-watch-container">
+                    <img src="{{ this.image }}" alt="{{ this.watchName }} Image" class="img-watch">
+                </div>
+                <div class="d-flex justify-content-center flex-column align-items-center">
+                    <div class="mt-2 mb-1">{{toUpperCase this.brand.brandName }}</div>
+                    <span class="fw-bold">{{ this.watchName }}</span>
+                </div>
+                <button type="button" class="btn bg-custom w-100 mt-2"><a
+                        href="/wristwonders/watches/collection/{{ this._id }}" class="text-decoration-none text-dark">
+                        View Details</a></button>
+            </a>
+        </div>
     </div>
     {{/each}}
 </div>

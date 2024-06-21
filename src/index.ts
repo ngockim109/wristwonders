@@ -43,6 +43,9 @@ const StartServer = () => {
         },
         formatWatchAutomatic: function (option: boolean) {
           return option ? "Yes" : "No";
+        },
+        eq: function (a: number, b: number) {
+          return a === b;
         }
       },
       runtimeOptions: {
