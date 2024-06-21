@@ -26,6 +26,11 @@ export default class MemberService {
         member: memberObject
       });
     }
+    if (/\s/.test(membername)) {
+      throw new BadRequestError("Membername must not contain spaces!", {
+        member: memberObject
+      });
+    }
     // Check if membername already exists
     const existingMember: IMember = await Member.findOne({
       membername: member.membername

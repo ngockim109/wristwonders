@@ -24,14 +24,6 @@ router.use("/", commentRoute);
 router.use("/brands", brandRoute);
 router.use("/watches", watchRoute);
 router.use("/error", errorRoute);
-
-// test 500 error
-router.get(
-  "/cause-error",
-  (req: Request, res: Response, next: NextFunction) => {
-    next(new Error("Trigger 500 error page"));
-  }
-);
 router.use((req: Request, res: Response, next: NextFunction) => {
   next(new NotFoundError());
 });

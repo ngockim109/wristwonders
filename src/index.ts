@@ -52,7 +52,6 @@ const StartServer = () => {
       partialsDir: path.join(__dirname, "views/partials"),
       helpers: {
         isString: function (value) {
-          console.log(value);
           return typeof value === "string";
         },
         formatDate: function (date) {
@@ -78,14 +77,13 @@ const StartServer = () => {
           if (!a || !b) {
             return false;
           }
-          console.log(a, b);
-          console.log(a === b);
           return a === b;
         },
         compare: function (a: any, b: any) {
-          console.log(a.toString(), b.toString());
-          console.log(a === b);
           return a.toString() === b.toString();
+        },
+        hasElements: function (array) {
+          return Array.isArray(array) && array.length > 0;
         }
       },
       runtimeOptions: {

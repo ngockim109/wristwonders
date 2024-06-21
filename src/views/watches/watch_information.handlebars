@@ -7,14 +7,14 @@
 {{else}}
 <div>
     <div class="container mt-4">
-        {{#if message}}
+        {{#if (hasElements message)}}
         {{#each message}}
         <div class="alert alert-success" role="alert">
             {{this}}
         </div>
         {{/each}}
         {{/if}}
-        {{#if error}}
+        {{#if (hasElements error)}}
         <div class="alert alert-danger d-flex flex-column" role="alert">
             {{#each error}}
 
@@ -23,7 +23,7 @@
             {{/each}}</div>
         {{/if}}
 
-        {{!-- {{#if (isString message)}}
+        {{#if (isString message)}}
         <div class="alert alert-success" role="alert">
             {{message}}
         </div>
@@ -33,7 +33,7 @@
         <div class="alert alert-danger" role="alert">
             {{error}}
         </div>
-        {{/if}} --}}
+        {{/if}}
 
         <div class="">
             <div class=" d-flex gap-4">

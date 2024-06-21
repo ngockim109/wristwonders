@@ -43,7 +43,21 @@ export default class WatchService {
     if (!watch) {
       return { error: "Watch not found!" };
     }
-    if (watch.watchName === data.watchName) {
+    const result = data.automatic ? data.automatic : watch.automatic;
+    console.log(watch.brand.toString());
+    console.log(data.brandId);
+    console.log(watch.automatic === result);
+    console.log(watch.watchName === data.watchName);
+    console.log(watch.watchDescription === data.watchDescription);
+    console.log(watch.price === Number(data.price));
+    console.log(watch.brand.toString() === data.brandId);
+    if (
+      watch.watchName === data.watchName &&
+      watch.image === data.image &&
+      watch.watchDescription === data.watchDescription &&
+      watch.price === Number(data.price) &&
+      watch.automatic === result
+    ) {
       return {
         error: "The new watch information cannot be the same as the old watch!"
       };

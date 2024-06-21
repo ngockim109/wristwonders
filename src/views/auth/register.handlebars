@@ -3,6 +3,28 @@
         <h2 class="mx-auto">Register</h2>
     </div>
     <div class="w-50 mx-auto">
+        {{#if (hasElements message)}}
+        {{#each message}}
+        <div class="alert alert-success" role="alert">
+            {{this}}
+        </div>
+        {{/each}}
+        {{/if}}
+        {{#if (hasElements error)}}
+        <div class="alert alert-danger d-flex flex-column" role="alert">
+            {{#each error}}
+
+            {{this}}
+
+            {{/each}}</div>
+        {{/if}}
+
+        {{#if (isString message)}}
+        <div class="alert alert-success" role="alert">
+            {{message}}
+        </div>
+        {{/if}}
+
         {{#if (isString error)}}
         <div class="alert alert-danger" role="alert">
             {{error}}

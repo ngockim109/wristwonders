@@ -3,6 +3,7 @@ import { IMember } from "../interfaces/member.interface";
 import { ACCESS_TOKEN_EXPIRATION } from "../utils/jwt";
 import MemberService from "../services/member.service";
 import { Unauthenticated } from "../errors/unauthenticatedError";
+import { Unauthorized } from "../errors/unauthorizedError";
 
 // Member register account
 const createMember = async (
@@ -97,7 +98,8 @@ const getUpdateProfile = (req: Request, res: Response, next: NextFunction) => {
       const newMember = { membername, name, YOB, isAdmin };
       res.render("members/profile/update_profile", {
         title: "Update profile",
-        member: newMember
+        member: newMember,
+        layout: newMember.isAdmin ? false : "main.handlebars"
       });
     } else {
       return next(new Unauthenticated());
@@ -119,12 +121,13 @@ const updateProfile = async (
       YOB: req.body.YOB
     };
     if (
-      updateData.name === memberLocals.name ||
+      updateData.name === memberLocals.name &&
       updateData.YOB === memberLocals.YOB
     ) {
       res.render("members/profile/update_profile", {
         title: "Update profile",
-        error: "The new information cannot same with the old one!"
+        error: "The new information cannot same with the old one!",
+        layout: memberLocals.isAdmin ? false : "main.handlebars"
       });
     } else {
       const updatedMember = await MemberService.updateProfileHandler(
@@ -137,7 +140,8 @@ const updateProfile = async (
         res.render("members/profile/update_profile", {
           member: newMember,
           title: "Update profile",
-          message: "Update profile successfully!"
+          message: "Update profile successfully!",
+          layout: newMember.isAdmin ? false : "main.handlebars"
         });
       }
     }
@@ -154,7 +158,8 @@ const getUpdatePassword = (req: Request, res: Response, next: NextFunction) => {
       const newMember = { membername, name, YOB, isAdmin };
       res.render("members/profile/update_password", {
         title: "Change password",
-        member: newMember
+        member: newMember,
+        layout: newMember.isAdmin ? false : "main.handlebars"
       });
     } else {
       return next(new Unauthenticated());
@@ -181,18 +186,17 @@ const updatePassword = async (
       newPassword,
       confirmPassword
     );
-    const { membername, name, YOB, isAdmin } = memberLocals;
-    const newMember = { membername, name, YOB, isAdmin };
-    res.clearCookie("access_token");
     if (updateMember) {
-      res.render("members/profile/update_password", {
-        member: newMember,
-        title: "Change password",
-        message: "Update password successfully!"
-      });
+      req.flash("message", "Update password successfully! Please login again!");
+      res.clearCookie("access_token");
+      res.redirect("/wristwonders/auth/login");
     }
   } catch (error) {
-    next(error);
+    if (error instanceof Unauthorized) {
+      return res.redirect("/wristwonders/auth/login");
+    } else {
+      next(error);
+    }
   }
 };
 

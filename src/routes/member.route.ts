@@ -1,13 +1,16 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import memberController from "../controllers/member.controller";
-import { requireSelf } from "../middlewares/authorization.middleware";
+import {
+  requireAuthor,
+  requireSelf
+} from "../middlewares/authorization.middleware";
 import validate from "../middlewares/validate.middleware";
 import { updatePasswordSchema } from "./validateSchema/updateProfileSchema.validate";
 import { updateProfileSchema } from "./validateSchema/updatePasswordSchema.validate";
 import commentController from "../controllers/comment.controller";
 const memberRoute = express.Router();
 
-memberRoute.get("/", memberController.getAllMembers);
+memberRoute.get("/", requireAuthor([true]), memberController.getAllMembers);
 memberRoute.get("/profile", requireSelf, memberController.getMember);
 memberRoute.get(
   "/profile/feedbacks",

@@ -69,7 +69,6 @@ const getMemberFeedbacks = async (
   try {
     const memberId = res.locals.member._id;
     const comments = await WatchService.getMemberFeedbacks(memberId);
-    console.log(comments);
     res.render("members/member_feedbacks", {
       comments: comments,
       title: "Member Feedbacks"

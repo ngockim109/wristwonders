@@ -4,6 +4,33 @@
         <i class="bi bi-chevron-right mx-1"></i>
         <span>Profile</span>
     </div>
+    {{#if (hasElements message)}}
+    {{#each message}}
+    <div class="alert alert-success" role="alert">
+        {{this}}
+    </div>
+    {{/each}}
+    {{/if}}
+    {{#if (hasElements error)}}
+    <div class="alert alert-danger d-flex flex-column" role="alert">
+        {{#each error}}
+
+        {{this}}
+
+        {{/each}}</div>
+    {{/if}}
+
+    {{#if (isString message)}}
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+    {{/if}}
+
+    {{#if (isString error)}}
+    <div class="alert alert-danger" role="alert">
+        {{error}}
+    </div>
+    {{/if}}
     {{#if member}}
     <div>
 

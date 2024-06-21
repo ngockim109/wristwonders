@@ -30,6 +30,9 @@ export default class UserService {
     if (user.password.length < 8) {
       return { error: "Password must be greater than 8 characters!" };
     }
+    if (/\s/.test(user.membername)) {
+      return { error: "Membername must not contain spaces!" };
+    }
     try {
       // Check if membername already exists
       const existingUser: IMember = await Member.findOne({

@@ -6,5 +6,5 @@ const accountRoute = express.Router();
 accountRoute.get("/", requireAuthor([true]), userController.getAllUsers);
 accountRoute.get("/:id", requireAuthor([true]), userController.getUser);
 accountRoute.delete("/", requireAuthor([true]), userController.deleteUser);
-accountRoute.post("/", userController.createUser);
+accountRoute.post("/", requireAuthor([true]), userController.createUser);
 export default accountRoute;

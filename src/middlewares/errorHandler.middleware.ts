@@ -80,6 +80,18 @@ const errorHandler: ErrorRequestHandler = (
           ...data
         });
       }
+      if (
+        originalUrl.includes("members/profile/update_password") ||
+        originalUrl.includes("members/profile/update_profile")
+      ) {
+        return res.render(originalUrl, {
+          title: title,
+          member: newMember,
+          error: error.errors,
+          layout: newMember?.isAdmin ? false : "main.handlebars",
+          ...data
+        });
+      }
       return res.render(originalUrl, {
         title: title,
         member: newMember,
@@ -95,8 +107,8 @@ const errorHandler: ErrorRequestHandler = (
 
     // Handle Unauthorized errors, forbidden
     if (error instanceof Unauthorized) {
-      // return res.redirect("/wristwonders/error/403");
-      return res.redirect("/wristwonders/error/404");
+      return res.redirect("/wristwonders/error/403");
+      // return res.redirect("/wristwonders/error/404");
     }
 
     // Handle bad request errors
@@ -104,7 +116,18 @@ const errorHandler: ErrorRequestHandler = (
       const data =
         error.data && typeof error.data === "object" ? error.data : {};
       console.error("error", error);
-
+      if (
+        originalUrl.includes("members/profile/update_password") ||
+        originalUrl.includes("members/profile/update_profile")
+      ) {
+        return res.render(originalUrl, {
+          title: title,
+          member: newMember,
+          error: error.message,
+          layout: newMember?.isAdmin ? false : "main.handlebars",
+          ...data
+        });
+      }
       return res.render(originalUrl, {
         title: title,
         member: newMember,

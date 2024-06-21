@@ -54,9 +54,11 @@ const searchWatch = async (req: Request, res: Response) => {
   const query = req.query.query as string;
   try {
     const watches = await WatchService.searchWatches(query);
+    const brands = await BrandService.getAllBrands();
     res.render("watches/search_result", {
       watches,
       query,
+      brands,
       title: "WristWonders"
     });
   } catch (error) {

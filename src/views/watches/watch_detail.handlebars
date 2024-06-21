@@ -3,8 +3,36 @@
     {{> admin_sidebar}}
     <div class="main-content" id="admin-layout">
         {{> admin_navbar}}
-        {{#if (isEmpty watch)}}
+        <div>
+            {{#if (hasElements message)}}
+            {{#each message}}
+            <div class="alert alert-success" role="alert">
+                {{this}}
+            </div>
+            {{/each}}
+            {{/if}}
+            {{#if (hasElements error)}}
+            <div class="alert alert-danger d-flex flex-column" role="alert">
+                {{#each error}}
 
+                {{this}}
+
+                {{/each}}</div>
+            {{/if}}
+
+            {{#if (isString message)}}
+            <div class="alert alert-success" role="alert">
+                {{message}}
+            </div>
+            {{/if}}
+
+            {{#if (isString error)}}
+            <div class="alert alert-danger" role="alert">
+                {{error}}
+            </div>
+            {{/if}}
+            {{#if (isEmpty watch)}}
+        </div>
         <div class="img-container my-auto">
             <img src="/images/empty.png" alt="Empty data" class="img">
         </div>
@@ -22,14 +50,14 @@
                     </div>
                 </div>
 
-                {{#if message}}
+                {{#if (hasElements message)}}
                 {{#each message}}
                 <div class="alert alert-success" role="alert">
                     {{this}}
                 </div>
                 {{/each}}
                 {{/if}}
-                {{#if error}}
+                {{#if (hasElements error)}}
                 <div class="alert alert-danger d-flex flex-column" role="alert">
                     {{#each error}}
 

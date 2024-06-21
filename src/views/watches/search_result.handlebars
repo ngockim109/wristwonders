@@ -3,9 +3,51 @@
     <i class="bi bi-chevron-right mx-1"></i>
     <span>Search result for "{{query}}"</span>
 </div>
+<div>
+    {{#if (hasElements message)}}
+    {{#each message}}
+    <div class="alert alert-success" role="alert">
+        {{this}}
+    </div>
+    {{/each}}
+    {{/if}}
+    {{#if (hasElements error)}}
+    <div class="alert alert-danger d-flex flex-column" role="alert">
+        {{#each error}}
+
+        {{this}}
+
+        {{/each}}</div>
+    {{/if}}
+
+    {{#if (isString message)}}
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+    {{/if}}
+
+    {{#if (isString error)}}
+    <div class="alert alert-danger" role="alert">
+        {{error}}
+    </div>
+    {{/if}}
+</div>
 {{#if watches.length}}
 <div>
-
+    {{!-- <div class="mt-3 w-100 d-flex justify-content-end">
+        <form action="/wristwonders/watches/filter" method="GET" class="d-flex gap-2">
+            <div class="">
+                <select name="brand" id="brand" class="form-select">
+                    <option value="" {{#if (stringCompare "" ../filterBrandName)}}selected{{/if}}>All Brands</option>
+                    {{#each brands}}
+                    <option value="{{this.brandName}}" {{#if (stringCompare this.brandName ../filterBrandName)}}selected
+                        {{/if}}>{{this.brandName}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-dark">Filter</button>
+        </form>
+    </div> --}}
     <div class="watch-cards my-4">
         {{#each watches}}
         <div class="watch-card">

@@ -109,8 +109,8 @@
                                     <label for="brand" class="form-label">Brand</label>
                                     <select class="form-select" id="brandName" name="brandName" required>
                                         {{#each ../brands}}
-                                        <option value="{{this._id}}" {{#if (stringCompare this._id
-                                            this.brand._id)}}selected {{/if}}>{{this.brandName}}</option>
+                                        <option value="{{this._id}}" {{#if (compare this._id
+                                            ../this.brand._id)}}selected {{/if}}>{{this.brandName}}</option>
                                         {{/each}}
                                     </select>
                                 </div>
