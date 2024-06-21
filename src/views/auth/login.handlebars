@@ -1,18 +1,29 @@
-<h1>Login</h1>
-{{#if (isString error)}}
-<div class="alert alert-danger" role="alert">
-    {{error}}
+<div class="container mt-5 mb-3">
+    <div class="mx- d-flex justify-content-center w-100">
+        <h2 class="mx-auto">Login</h2>
+    </div>
+    <div class="w-50 mx-auto">
+        {{#if (isString error)}}
+        <div class="alert alert-danger" role="alert">
+            {{error}}
+        </div>
+        {{/if}}
+        <form action="/wristwonders/auth/login" method="POST">
+
+            <label for="membername" class="form-label">Membername</label>
+            <input class="form-control" type="text" id="membername" name="membername" required min="1"
+                value="{{membername}}">
+            <p class="text-danger">{{error.username}}</p>
+            <label for="password" class="form-label">Password</label>
+            <input class="form-control" type="password" id="password" name="password" required min="8">
+            <p class="text-danger">{{error.password}}</p>
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <button class="btn btn-dark w-100 mb-2" type="submit">Login</button>
+                <p class="mt-3">
+                    <span>Have no account yet?</span>
+                    <a href="/wristwonders/auth/register" class="text-decoration-none text-primary">Register now</a>
+                </p>
+            </div>
+        </form>
+    </div>
 </div>
-{{/if}}
-<form action="/wristwonders/auth/login" method="POST">
-
-    <label for="membername">Membername:</label>
-    <input type="text" id="membername" name="membername" required min="1" value="{{membername}}"><br><br>
-    <p class="text-danger">{{error.username}}</p>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required min="8"><br><br>
-    <p class="text-danger">{{error.password}}</p>
-    <button type="submit">Login</button>
-    <a href="/wristwonders/auth/register">Register</a>
-</form>

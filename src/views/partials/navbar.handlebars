@@ -15,8 +15,9 @@
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <form class="d-flex me-4" role="search">
-                    <input class="form-control search-input" type="search" placeholder="Search" aria-label="Search">
+                <form action="/wristwonders/watches/search" method="get" class="d-flex me-4">
+                    <input class="form-control search-input" type="text" name="query" placeholder="Search watch name..."
+                        aria-label="Search" required>
                     <button class="btn btn-outline-success btn-search" type="submit">Search</button>
                 </form>
                 {{#if member}}
@@ -27,8 +28,13 @@
                         {{member.membername}}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
+                        {{#if member.isAdmin}}
+                        <li><a class="dropdown-item text-decoration-none text-light "
+                                href="/wristwonders/admin/profile">Profile</a></li>
+                        {{else}}
                         <li><a class="dropdown-item text-decoration-none text-light "
                                 href="/wristwonders/members/profile">Profile</a></li>
+                        {{/if}}
                         {{#if member.isAdmin}}
                         <li><a class="dropdown-item text-decoration-none text-light "
                                 href="/wristwonders/brands">Management</a></li>

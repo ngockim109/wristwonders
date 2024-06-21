@@ -1,11 +1,26 @@
-<div>
+<div class="container ">
     {{#if member}}
-    <h2>Profile Information</h2>
-    <p>Membername: {{ member.membername }}</p>
-    <p>Name: {{ member.name }}</p>
-    <p>Year of Birth: {{ member.YOB }}</p>
-    <a href="/wristwonders/members/profile/update-profile">Update Profile</a>
-    <a href="/wristwonders/members/profile/update-password">Change Password</a>
+    <div>
+        <div class="card w-75 mx-auto profile-mem-container">
+            <div class="card-header d-flex gap-2 align-items-center">
+                <h2>Profile Information</h2>
+                <button type="button" class="btn bg-secondary me-2 fw-bold">
+                    <a href="/wristwonders/members/profile/update-profile" class="text-decoration-none text-light">
+                        <i class="bi bi-pencil-square d-flex justify-content-center align-items-center"></i>
+                    </a>
+                </button>
+                <button type="button" class="btn bg-secondary me-2 fw-bold">
+                    <a href="/wristwonders/members/profile/update-password" class="text-decoration-none text-light">
+                        Change Password</a>
+                </button>
+            </div>
+            <div class="card-body">
+                <p>Membername: {{ member.membername }}</p>
+                <p>Name: {{ member.name }}</p>
+                <p>Year of Birth: {{ member.YOB }}</p>
+            </div>
+        </div>
+    </div>
     {{else}}
     <p>Member not found.</p>
     {{/if}}

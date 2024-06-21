@@ -1,3 +1,4 @@
+import { Unauthorized } from "../errors/unauthorizedError";
 import CommentService from "../services/comment.service";
 import WatchService from "../services/watch.service";
 
@@ -17,29 +18,37 @@ const getAllComments = async (req, res, next) => {
 const createComment = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log("controller", id);
+    const member = res.locals.member;
+    if (member.isAdmin) {
+      req.flash("error", "Admin cannot comment!");
+      res.redirect(`/wristwonders/watches/collection/${id}`);
+    }
+    const memberId = res.locals.member._id;
     const commentData = {
       rating: req.body.rating,
       content: req.body.content,
       author: res.locals.member._id
     };
-    const comment = await CommentService.createComment(id, commentData);
-    const watch = await WatchService.getWatch(id);
-    if (comment) {
-      res.render("watches/watch_information", {
-        title: watch.watchName ?? "Watch",
-        watch: watch
-      });
+    const comment = await CommentService.createComment(
+      id,
+      commentData,
+      memberId
+    );
+    if (comment.comment) {
+      req.flash("message", "Created comment successfully!");
+      res.redirect(`/wristwonders/watches/collection/${id}`);
     } else {
-      const watch = await WatchService.getWatch(id);
-      res.render("watches/watch_information", {
-        title: watch.watchName ?? "Watch",
-        message: "Created watch successfully!",
-        watch: watch
-      });
+      if (comment.error) {
+        req.flash("error", comment.error);
+        res.redirect(`/wristwonders/watches/collection/${id}`);
+      }
     }
   } catch (error) {
-    next(error);
+    if (error instanceof Unauthorized) {
+      res.redirect("/wristwonders/error/403");
+    } else {
+      next(error);
+    }
   }
 };
 

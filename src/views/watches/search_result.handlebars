@@ -1,0 +1,35 @@
+{{#if watches.length}}
+<div>
+    <div class="rounded-1 bg-new-secondary py-2 px-3 mt-3 d-flex align-items-center">
+        <a class="text-decoration-none" href="/wristwonders">Home</a>
+        <i class="bi bi-chevron-right mx-1"></i>
+        <span>Search result for "{{query}}"</span>
+    </div>
+    <div class="watch-cards my-4">
+        {{#each watches}}
+        <div class="watch-card">
+            <div class="card">
+                <a href="/wristwonders/watches/collection/{{ this._id }}" class="text-decoration-none text-dark">
+                    <div class="img-watch-container">
+                        <img src="{{ this.image }}" alt="{{ this.watchName }} Image" class="img-watch">
+                    </div>
+                    <div class="d-flex justify-content-center flex-column align-items-center">
+                        <div class="mt-2 mb-1">{{toUpperCase this.brand.brandName }}</div>
+                        <span class="fw-bold">{{ this.watchName }}</span>
+                    </div>
+                    <button type="button" class="btn bg-custom w-100 mt-2"><a
+                            href="/wristwonders/watches/collection/{{ this._id }}"
+                            class="text-decoration-none text-dark">
+                            View Details</a></button>
+                </a>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+{{else}}
+<div class="img-container my-auto d-flex flex-column justify-content-center align-items-center mt-5">
+    <img src="/images/empty.png" alt="Empty data" class="img">
+    <span>No watches found matching "{{query}}"</span>
+</div>
+{{/if}}

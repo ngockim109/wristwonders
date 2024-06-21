@@ -224,3 +224,26 @@ a {
 .rating_disabled > input {
   display: none;
 }
+
+.rating_disabled > input:checked ~ label {
+  color: #f79426;
+}
+
+.rating_disabled > input:checked + label:hover,
+.rating_disabled > input:checked ~ label:hover,
+.rating_disabled > label:hover ~ input:checked ~ label,
+.rating_disabled > input:checked ~ label:hover ~ label {
+  color: #fece31;
+}
+
+.profile-mem-container {
+  margin-top: 130px;
+}
+
+.bg-custom-secondary {
+  background: #6c757d;
+}
+
+.bg-new-secondary {
+  background: rgb(223, 221, 210, 0.5);
+}

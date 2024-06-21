@@ -9,5 +9,4 @@ watchRoute.get("/:id", requireAuthor([true]), watchController.getWatch);
 watchRoute.post("/", requireAuthor([true]), watchController.createWatch);
 watchRoute.put("/:id", requireAuthor([true]), watchController.updateWatch);
 watchRoute.delete("/:id", requireAuthor([true]), watchController.deleteWatch);
-
 export default watchRoute;

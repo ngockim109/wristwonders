@@ -7,7 +7,23 @@
 {{else}}
 <div>
     <div class="container mt-4">
-        {{#if (isString message)}}
+        {{#if message}}
+        {{#each message}}
+        <div class="alert alert-success" role="alert">
+            {{this}}
+        </div>
+        {{/each}}
+        {{/if}}
+        {{#if error}}
+        <div class="alert alert-danger d-flex flex-column" role="alert">
+            {{#each error}}
+
+            {{this}}
+
+            {{/each}}</div>
+        {{/if}}
+
+        {{!-- {{#if (isString message)}}
         <div class="alert alert-success" role="alert">
             {{message}}
         </div>
@@ -17,7 +33,7 @@
         <div class="alert alert-danger" role="alert">
             {{error}}
         </div>
-        {{/if}}
+        {{/if}} --}}
 
         <div class="">
             <div class=" d-flex gap-4">
@@ -39,19 +55,17 @@
                 </div>
             </div>
             {{!-- comment --}}
+
             <div class="rating-container mt-5">
                 <h4 class="fw-bold">Member feedbacks</h4>
-                <div class="my-3 bg-custom p-4">
+                {{#if member}}
+                {{#if member.isAdmin}}
+                {{else}}
+                <div class="my-3 bg-custom p-4 rounded-1">
                     <form action="/wristwonders/watches/collection/{{watch._id}}" method="POST">
                         <div class="mb-3 d-flex justify-content-center flex-column align-items-center">
                             <h3>Rating
                             </h3>
-                            {{!-- <select class="form-select" id="rating" name="rating" required>
-                                <option value="" disabled selected hidden>Choose rating</option>
-                                <option value="1">1 - Poor</option>
-                                <option value="2">2 - Average</option>
-                                <option value="3">3 - Excellent</option>
-                            </select> --}}
                             {{> star_rating}}
                         </div>
                         <div class="mb-2">
@@ -62,29 +76,43 @@
                         </div>
                     </form>
                 </div>
+                {{/if}}
+                {{else}}
+                <div class="my-3 rounded-1 d-flex flex-column align-items-center justify-content-center bg-custom p-4">
+                    <p class="">You must have account to comment!</p>
+                    <button class="btn btn-dark"><a class="text-decoration-none text-light"
+                            href="/wristwonders/auth/login">Login</a></button>
+                </div>
+                {{/if}}
                 {{#if watch.comments}}
                 {{!-- Display all comments --}}
                 <ul class="list-group mb-4">
                     {{#each watch.comments}}
-                    <li class="list-group-item d-flex flex-column">
+                    <li class="list-group-item d-flex flex-column my-2">
                         <div>
                             <div class="rating_disabled">
-                                <input type="radio" id="star3" name="rating" value="3" disabled {{#if (eq rating
-                                    3)}}checked{{/if}} />
-                                <label class="star" for="star3" title="Excellent" aria-hidden="true"></label>
-                                <input type="radio" id="star2" name="rating" value="2" disabled {{#if (eq rating
-                                    3)}}checked{{/if}} />
-                                <label class="star" for="star2" title="Average" aria-hidden="true"></label>
-                                <input type="radio" id="star1" name="rating" value="1" disabled {{#if (eq rating
-                                    3)}}checked{{/if}} />
-                                <label class="star" for="star1" title="Poor" aria-hidden="true"></label>
+                                <input type="radio" id="star3-{{author.membername}}" disabled
+                                    name="rating-{{author.membername}}" value="3" {{#if (eq rating 3)}}checked{{/if}} />
+                                <label class="star" for="star3-{{author.membername}}" title="Excellent"
+                                    aria-hidden="true"></label>
+                                <input type="radio" id="star2-{{author.membername}}" disabled
+                                    name="rating-{{author.membername}}" value="2" {{#if (eq rating 2)}}checked{{/if}} />
+                                <label class="star" for="star2-{{author.membername}}" title="Average"
+                                    aria-hidden="true"></label>
+                                <input type="radio" id="star1-{{author.membername}}" disabled
+                                    name="rating-{{author.membername}}" value="1" {{#if (eq rating 1)}}checked{{/if}} />
+                                <label class="star" for="star1-{{author.membername}}" title="Poor"
+                                    aria-hidden="true"></label>
                             </div>
                         </div>
                         <div>
-                            <strong>{{author.name}}</strong>
-                            <p>{{content}}</p>
+                            <div class="d-flex flex-column">
+                                <strong>{{author.name}}</strong>
+                                <small class="fs-6">{{author.membername}}</span>
+                            </div>
+                            <p class="mt-2">{{content}}</p>
                         </div>
-                        <small>Posted on {{formatDate createdAt}}</small>
+                        <small>Posted on {{formatDateTime createdAt}}</small>
                     </li>
                     {{/each}}
                 </ul>

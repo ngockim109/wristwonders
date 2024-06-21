@@ -3,20 +3,21 @@ import Brand from "../models/brand.model";
 import { BadRequestError } from "../errors/badRequestError";
 
 export default class WatchService {
-  static async getAllWatchHandler() {
-    const watches = await Watch.find().populate("brand").exec();
-    return watches;
-  }
-  static async getWatchHandler(watchId: string) {
-    const watch = await Watch.findById(watchId).exec();
-    if (!watch) {
-      throw new BadRequestError("Watch not found!");
-    }
-    return watch;
-  }
   static async getAllWatches() {
     const watches = await Watch.find().populate("brand").exec();
     return watches;
+  }
+  static async getWatchesByBrand(brandName: string) {
+    const brand = await Brand.findOne({ brandName });
+    if (!brand)
+      return {
+        error: "Brand not found"
+      };
+    const watches = await Watch.find({ brand: brand._id })
+      .populate("brand")
+      .exec();
+    console.log(watches);
+    return { watches: watches };
   }
 
   static async getWatch(watchId: string) {
@@ -81,6 +82,23 @@ export default class WatchService {
     } else {
       const deletedWatch = await Watch.findByIdAndDelete(id);
       return { watch: deletedWatch };
+    }
+  }
+  static async searchWatches(query: string) {
+    try {
+      const regex = new RegExp(query, "i");
+      // const watches = await Watch.find({
+      //   $or: [
+      //     { watchName: { $regex: regex } },
+      //     { watchDescription: { $regex: regex } }
+      //   ]
+      // }).populate("brand");
+      const watches = await Watch.find({
+        watchName: { $regex: regex }
+      }).populate("brand");
+      return watches;
+    } catch (error) {
+      throw new Error(`Error while searching watches: ${error.message}`);
     }
   }
 }
