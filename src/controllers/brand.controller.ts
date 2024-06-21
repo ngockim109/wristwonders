@@ -50,95 +50,54 @@ const createBrand = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await BrandService.createBrand(brandName);
     if (result.error) {
-      res.render("brands", {
-        title: "Brands",
-        error: result.error,
-        brands: await BrandService.getAllBrands(),
-        layout: false
-      });
+      req.flash("error", result.error);
+      res.redirect("/wristwonders/brands");
     }
-    res.render("brands", {
-      title: "Brands",
-      message: "Create brand successfully!",
-      brand: result.brand,
-      brands: await BrandService.getAllBrands(),
-      layout: false
-    });
+    req.flash("message", "Create brand successfully!");
+    res.redirect("/wristwonders/brands");
   } catch (error) {
     next(error);
   }
 };
-const updateBrand = async (req, res, next) => {
+const updateBrand = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const { brandName, brand_detail } = req.body;
   try {
     const updatedBrand = await BrandService.updateBrand(id, brandName);
     if (updatedBrand.error) {
+      req.flash("error", updatedBrand.error);
       if (brand_detail === "detail") {
-        return res.render("brands/brand_detail", {
-          title: brandName ?? "Brands",
-          error: updatedBrand?.error,
-          brand: await BrandService.getBrand(id),
-          layout: false
-        });
+        res.redirect(`/wristwonders/brands/${id}`);
       } else {
-        return res.render("brands", {
-          title: "Brands",
-          error: updatedBrand?.error,
-          brands: await BrandService.getAllBrands(),
-          layout: false
-        });
+        res.redirect("/wristwonders/brands");
       }
     } else {
+      req.flash("message", "Update brand successfully!");
       if (brand_detail === "detail") {
-        res.render("brands/brand_detail", {
-          title: brandName ?? "Brands",
-          message: "Update brand successfully!",
-          brand: await BrandService.getBrand(id),
-          layout: false
-        });
+        res.redirect(`/wristwonders/brands/${id}`);
       }
-      res.render("brands", {
-        title: "Brands",
-        message: "Update brand successfully!",
-        brand: updatedBrand,
-        brands: await BrandService.getAllBrands(),
-        layout: false
-      });
+      res.redirect("/wristwonders/brands");
     }
   } catch (error) {
     next(error);
   }
 };
 
-const deleteBrand = async (req, res, next) => {
+const deleteBrand = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const { brand_detail } = req.body;
   try {
     const deletedBrand = await BrandService.deleteBrand(id);
     if (deletedBrand.error) {
+      req.flash("error", deletedBrand.error);
       if (brand_detail === "detail") {
-        return res.render("brands/brand_detail", {
-          title: (await BrandService.getBrand(id))?.brandName ?? "",
-          error: deletedBrand.error,
-          brand: await BrandService.getBrand(id),
-          layout: false
-        });
+        res.redirect(`/wristwonders/brands/${id}`);
       } else {
-        return res.render("brands", {
-          title: "Brands",
-          error: deletedBrand.error,
-          brands: await BrandService.getAllBrands(),
-          layout: false
-        });
+        res.redirect("/wristwonders/brands");
       }
     } else {
-      res.render("brands", {
-        title: "Brands",
-        message: "Delete brand successfully!",
-        brands: await BrandService.getAllBrands(),
-        layout: false
-      });
+      req.flash("message", "Delete brand successfully!");
+      res.redirect("/wristwonders/brands");
     }
   } catch (error) {
     next(error);

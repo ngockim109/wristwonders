@@ -1,4 +1,4 @@
-import { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import { GlobalError } from "../errors/globalError";
 import { ValidationError } from "../errors/validationError";
 import { Unauthenticated } from "../errors/unauthenticatedError";
@@ -7,7 +7,12 @@ import { BadRequestError } from "../errors/badRequestError";
 import { NotFoundError } from "../errors/notFoundError";
 import { IMember } from "../interfaces/member.interface";
 
-const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
+const errorHandler: ErrorRequestHandler = (
+  error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const transformToTitleCase = (text: string) => {
     return text
       .replace(/-/g, " ")

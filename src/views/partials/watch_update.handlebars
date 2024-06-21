@@ -44,9 +44,9 @@
                         <input type="hidden" id="brandId" name="brandId" value="{{watch.brand._id}}">
                         <label for="brand" class="form-label">Brand</label>
                         <select class="form-select" id="brandName" name="brandName" required>
-                            <option value="" disabled selected hidden>{{watch.brand.brandName}}</option>
                             {{#each brands}}
-                            <option value="{{this._id}}">{{this.brandName}}</option>
+                            <option value="{{this._id}}" {{#if (compare this._id ../watch.brand._id)}}selected {{/if}}>
+                                {{this.brandName}}</option>
                             {{/each}}
 
                         </select>

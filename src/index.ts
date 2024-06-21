@@ -81,6 +81,11 @@ const StartServer = () => {
           console.log(a, b);
           console.log(a === b);
           return a === b;
+        },
+        compare: function (a: any, b: any) {
+          console.log(a.toString(), b.toString());
+          console.log(a === b);
+          return a.toString() === b.toString();
         }
       },
       runtimeOptions: {

@@ -8,15 +8,18 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!res.locals.member) {
       const loginData: ILogin = { membername, password };
-      const token = await AuthService.loginHandler(loginData);
+      const result = await AuthService.loginHandler(loginData);
 
       // Store token to cookies
-      res.cookie("access_token", token, {
+      res.cookie("access_token", result.token, {
         httpOnly: true,
         maxAge: ACCESS_TOKEN_EXPIRATION * 1000
       });
-
-      res.redirect("/wristwonders");
+      if (result.member.isAdmin) {
+        res.redirect("/wristwonders/brands");
+      } else {
+        res.redirect("/wristwonders");
+      }
     } else {
       res.redirect("/wristwonders");
     }

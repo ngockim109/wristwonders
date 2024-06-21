@@ -1,24 +1,32 @@
-<div class="container mt-5">
-    <h2 class="mt-3">Update Profile</h2>
-    {{#if (isString message)}}
-    <div class="alert alert-success" role="alert">
-        {{message}}
+<div class="container mt-3">
+    <div class="rounded-1 bg-new-secondary py-2 px-3 mt-3 d-flex align-items-center">
+        {{#if member.isAdmin}} <a class="text-decoration-none" href="/wristwonders/admin/profile">Profile</a> {{else}}
+        <a class="text-decoration-none" href="/wristwonders/members/profile">Profile</a> {{/if}}
+        <i class="bi bi-chevron-right mx-1"></i>
+        <span>Update profile</span>
     </div>
-    {{/if}}
-    {{#if (isString error)}}
-    <div class="alert alert-danger" role="alert">
-        {{error}}
-    </div>
-    {{/if}}
-    <form action="/wristwonders/members/profile/update-profile" method="POST">
-        <label for="name">Name:</label>
-        <input class="form-control" type="text" id="name" name="name" value="{{member.name}}" required min="1">
-        <p class="text-danger">{{error.name}}</p>
-        <label for="YOB">Year of Birth:</label>
-        <input class="form-control" type="number" id="YOB" name="YOB" value="{{member.YOB}}" required>
-        <p class="text-danger">{{error.YOB}}</p>
-        <div class="d-flex justify-content-center align-items-center">
-            <button class="btn btn-dark" type="submit">Update</button>
+    <h4 class="mt-3">Update Profile</h4>
+    <div class="d-flex flex-column align-items-center justify-content-center">
+        {{#if (isString message)}}
+        <div class="alert alert-success w-50" role="alert">
+            {{message}}
         </div>
-    </form>
+        {{/if}}
+        {{#if (isString error)}}
+        <div class="alert alert-danger w-50" role="alert">
+            {{error}}
+        </div>
+        {{/if}}
+        <form action="/wristwonders/members/profile/update-profile" method="POST" class="w-50">
+            <label for="name">Name:</label>
+            <input class="form-control" type="text" id="name" name="name" value="{{member.name}}" required min="1">
+            <p class="text-danger">{{error.name}}</p>
+            <label for="YOB">Year of Birth:</label>
+            <input class="form-control" type="number" id="YOB" name="YOB" value="{{member.YOB}}" required>
+            <p class="text-danger">{{error.YOB}}</p>
+            <div class="d-flex justify-content-center align-items-center">
+                <button class="btn btn-dark" type="submit">Update</button>
+            </div>
+        </form>
+    </div>
 </div>

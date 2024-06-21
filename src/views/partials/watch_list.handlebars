@@ -108,22 +108,15 @@
                                     <input type="hidden" id="brandId" name="brandId" value="{{this.brand._id}}">
                                     <label for="brand" class="form-label">Brand</label>
                                     <select class="form-select" id="brandName" name="brandName" required>
-                                        <option value="" disabled selected hidden>{{this.brand.brandName}}</option>
-                                        {{!-- {{#each brands}}
-                                        <option value="{{this._id}}">{{this.brandName}}</option>
-                                        {{/each}} --}}
-                                        <option value="6672466b50ad29c861d58618">Rolex</option>
-                                        <option value="667249cca645656f5f822905">Patek Philippe</option>
-                                        <option value="66724a5204124588f651789d">Rose Gold</option>
-                                        <option value="6673bfe4716afafc13cccf96">Cartier</option>
-                                        <option value="6673c951716afafc13cccfd2">Carl Suchy & Söhne</option>
-                                        <option value="6673cb96716afafc13ccd00b">Ball Watch</option>
-                                        <option value="6674282bebe4f17a7ce4766e">Omega</option>
+                                        {{#each ../brands}}
+                                        <option value="{{this._id}}" {{#if (stringCompare this._id
+                                            this.brand._id)}}selected {{/if}}>{{this.brandName}}</option>
+                                        {{/each}}
                                     </select>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </form>
@@ -149,7 +142,6 @@
                                 <span aria-hidden="true">Cancel</span>
                             </button>
                             <form action="/wristwonders/watches/{{this._id}}?_method=DELETE" method="POST">
-                                <input type="hidden" id="watch_detail" name="watch_detail" value="detail">
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                         </div>

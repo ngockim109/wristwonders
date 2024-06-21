@@ -45,14 +45,11 @@ export default class WatchService {
     }
     if (watch.watchName === data.watchName) {
       return {
-        error: "The new watch name cannot be the same as the old watch name!"
+        error: "The new watch information cannot be the same as the old watch!"
       };
     }
     const brand = await Brand.findById(data.brandId);
     const newBrand = await Brand.findById(data.brandName);
-    console.log(brand);
-    console.log(data.brandId);
-    console.log(data.brandName);
     if (!brand) {
       return {
         error: "Brand does not exits!"
@@ -80,6 +77,9 @@ export default class WatchService {
     if (!existingWatch) {
       return { error: "Watch does not exist!" };
     } else {
+      if (existingWatch?.comments?.length > 0) {
+        return { error: "Cannot delete watch already has comment!" };
+      }
       const deletedWatch = await Watch.findByIdAndDelete(id);
       return { watch: deletedWatch };
     }
@@ -99,6 +99,39 @@ export default class WatchService {
       return watches;
     } catch (error) {
       throw new Error(`Error while searching watches: ${error.message}`);
+    }
+  }
+  // comments
+  static async getMemberFeedbacks(memberId: string) {
+    try {
+      const watches = await Watch.find({
+        "comments.author": memberId
+      })
+        .populate({
+          path: "comments",
+          match: { author: memberId },
+          populate: { path: "author", select: "membername name" }
+        })
+        .populate("brand")
+        .select("watchName image brand")
+        .exec();
+
+      const comments = watches.reduce((acc, watch) => {
+        watch.comments.forEach((comment) => {
+          if (comment.author._id.toString() === memberId.toString()) {
+            acc.push({
+              watch: watch,
+              image: watch.image,
+              ...comment.toObject()
+            });
+          }
+        });
+        return acc;
+      }, []);
+
+      return comments;
+    } catch (error) {
+      throw new Error(`Error retrieving member's feedbacks: ${error.message}`);
     }
   }
 }

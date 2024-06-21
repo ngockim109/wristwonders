@@ -128,8 +128,8 @@ a {
 }
 
 .img-watch-admin {
-  width: 200px;
-  height: 200px;
+  width: 170px;
+  height: 170px;
   object-fit: contain;
 }
 
@@ -180,7 +180,7 @@ a {
 
 .rating > label:before {
   margin: 5px;
-  font-size: 2em;
+  font-size: 1.7em;
   font-family: FontAwesome;
   content: "\f005";
   display: inline-block;
@@ -215,7 +215,7 @@ a {
 
 .rating_disabled > label:before {
   margin: 5px;
-  font-size: 2em;
+  font-size: 1em;
   font-family: FontAwesome;
   content: "\f005";
   display: inline-block;
@@ -237,7 +237,7 @@ a {
 }
 
 .profile-mem-container {
-  margin-top: 130px;
+  margin-top: 100px;
 }
 
 .bg-custom-secondary {

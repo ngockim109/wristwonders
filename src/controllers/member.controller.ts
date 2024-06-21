@@ -118,19 +118,28 @@ const updateProfile = async (
       name: req.body.name,
       YOB: req.body.YOB
     };
-
-    const updatedMember = await MemberService.updateProfileHandler(
-      memberLocals._id,
-      updateData
-    );
-    const { membername, name, YOB, isAdmin } = updatedMember;
-    const newMember = { membername, name, YOB, isAdmin };
-    if (updatedMember) {
+    if (
+      updateData.name === memberLocals.name ||
+      updateData.YOB === memberLocals.YOB
+    ) {
       res.render("members/profile/update_profile", {
-        member: newMember,
         title: "Update profile",
-        message: "Update profile successfully!"
+        error: "The new information cannot same with the old one!"
       });
+    } else {
+      const updatedMember = await MemberService.updateProfileHandler(
+        memberLocals._id,
+        updateData
+      );
+      const { membername, name, YOB, isAdmin } = updatedMember;
+      const newMember = { membername, name, YOB, isAdmin };
+      if (updatedMember) {
+        res.render("members/profile/update_profile", {
+          member: newMember,
+          title: "Update profile",
+          message: "Update profile successfully!"
+        });
+      }
     }
   } catch (error) {
     next(error);

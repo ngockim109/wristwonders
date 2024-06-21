@@ -1,10 +1,15 @@
+import { NextFunction, Request, Response } from "express";
 import { Unauthorized } from "../errors/unauthorizedError";
 import CommentService from "../services/comment.service";
 import WatchService from "../services/watch.service";
 
-const getAllComments = async (req, res, next) => {
+const getAllComments = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const { id } = req.params.id;
+    const { id } = req.params;
     const comments = await CommentService.getAllComments(id);
     res.render("watches", {
       comments: comments,
@@ -15,7 +20,11 @@ const getAllComments = async (req, res, next) => {
   }
 };
 
-const createComment = async (req, res, next) => {
+const createComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { id } = req.params;
     const member = res.locals.member;
@@ -52,10 +61,15 @@ const createComment = async (req, res, next) => {
   }
 };
 
-const getMemberFeedbacks = async (req, res, next) => {
+const getMemberFeedbacks = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const memberId = req.locals.member._id;
-    const comments = await CommentService.getMemberFeedbacks(memberId);
+    const memberId = res.locals.member._id;
+    const comments = await WatchService.getMemberFeedbacks(memberId);
+    console.log(comments);
     res.render("members/member_feedbacks", {
       comments: comments,
       title: "Member Feedbacks"

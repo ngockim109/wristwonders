@@ -1,17 +1,27 @@
 <div class="container ">
+    <div class="rounded-1 bg-new-secondary py-2 px-3 mt-3 d-flex align-items-center mb-3">
+        <a class="text-decoration-none" href="/wristwonders">Home</a>
+        <i class="bi bi-chevron-right mx-1"></i>
+        <span>Profile</span>
+    </div>
     {{#if member}}
     <div>
+
         <div class="card w-75 mx-auto profile-mem-container">
             <div class="card-header d-flex gap-2 align-items-center">
-                <h2>Profile Information</h2>
-                <button type="button" class="btn bg-secondary me-2 fw-bold">
-                    <a href="/wristwonders/members/profile/update-profile" class="text-decoration-none text-light">
+                <h4>Profile Information</h4>
+                <button type="button" class="btn bg-custom text-dark me-2 fw-bold">
+                    <a href="/wristwonders/members/profile/update-profile" class="text-decoration-none text-dark">
                         <i class="bi bi-pencil-square d-flex justify-content-center align-items-center"></i>
                     </a>
                 </button>
-                <button type="button" class="btn bg-secondary me-2 fw-bold">
-                    <a href="/wristwonders/members/profile/update-password" class="text-decoration-none text-light">
+                <button type="button" class="btn bg-custom text-dark me-2 fw-bold">
+                    <a href="/wristwonders/members/profile/update-password" class="text-decoration-none text-dark">
                         Change Password</a>
+                </button>
+                <button type="button" class="btn bg-custom text-dark me-2 fw-bold">
+                    <a href="/wristwonders/members/profile/feedbacks" class="text-decoration-none text-dark">
+                        View my feedbacks</a>
                 </button>
             </div>
             <div class="card-body">
@@ -22,6 +32,11 @@
         </div>
     </div>
     {{else}}
-    <p>Member not found.</p>
+    <div class="d-flex flex-column align-items-center justify-content-center">
+        <div class="img-container my-auto">
+            <img src="/images/empty.png" alt="Empty data" class="img">
+        </div>
+        <p>Member not found.</p>
+    </div>
     {{/if}}
 </div>

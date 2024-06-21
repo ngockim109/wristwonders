@@ -1,8 +1,13 @@
+import { NextFunction, Request, Response } from "express";
 import { BadRequestError } from "../errors/badRequestError";
 import BrandService from "../services/brand.service";
 import WatchService from "../services/watch.service";
 
-const getAllWatches = async (req, res, next) => {
+const getAllWatches = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const watches = await WatchService.getAllWatches();
     res.render("watches", {
@@ -16,7 +21,7 @@ const getAllWatches = async (req, res, next) => {
   }
 };
 
-const getWatch = async (req, res, next) => {
+const getWatch = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   try {
     const watch = await WatchService.getWatch(id);
@@ -41,7 +46,7 @@ const getWatch = async (req, res, next) => {
   }
 };
 
-const createWatch = async (req, res, next) => {
+const createWatch = async (req: Request, res: Response, next: NextFunction) => {
   const { watchName, image, price, automatic, watchDescription, brand } =
     req.body;
   try {
@@ -55,27 +60,18 @@ const createWatch = async (req, res, next) => {
     });
 
     if (result) {
-      res.render("watches", {
-        title: "Watches",
-        watches: await WatchService.getAllWatches(),
-        brands: await BrandService.getAllBrands(),
-        layout: false
-      });
+      req.flash("message", "Created watch successfully!");
+      res.redirect("/wristwonders/watches");
     } else {
-      res.render("watches", {
-        title: "Watches",
-        message: "Created watch successfully!",
-        watches: await WatchService.getAllWatches(),
-        brands: await BrandService.getAllBrands(),
-        layout: false
-      });
+      req.flash("error", "Created watch failed!");
+      res.redirect("/wristwonders/watches");
     }
   } catch (error) {
     next(error);
   }
 };
 
-const updateWatch = async (req, res, next) => {
+const updateWatch = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const {
     watchName,
@@ -88,6 +84,7 @@ const updateWatch = async (req, res, next) => {
     brandId
   } = req.body;
   try {
+    console.log(brandId);
     const updatedWatch = await WatchService.updateWatch(id, {
       watchName,
       image,
@@ -98,40 +95,18 @@ const updateWatch = async (req, res, next) => {
       brandId
     });
     if (updatedWatch.error) {
+      req.flash("error", updatedWatch.error);
       if (watch_detail === "detail") {
-        return res.render("watches/watch_detail", {
-          title: updatedWatch?.watch?.watchName ?? "Watch",
-          error: updatedWatch?.error,
-          watch: await WatchService.getWatch(id),
-          brands: await BrandService.getAllBrands(),
-          layout: false
-        });
+        res.redirect(`/wristwonders/watches/${id}`);
       } else {
-        return res.render("watches", {
-          title: "Watches",
-          error: updatedWatch?.error,
-          watches: await WatchService.getAllWatches(),
-          brands: await BrandService.getAllBrands(),
-          layout: false
-        });
+        res.redirect("/wristwonders/watches");
       }
     } else {
+      req.flash("message", "Updated watch successfully!");
       if (watch_detail === "detail") {
-        res.render("watches/watch_detail", {
-          title: updatedWatch?.watch?.watchName ?? "Watch",
-          message: "Updated watch successfully!",
-          watch: await WatchService.getWatch(id),
-          brands: await BrandService.getAllBrands(),
-          layout: false
-        });
+        res.redirect(`/wristwonders/watches/${id}`);
       } else {
-        res.render("watches", {
-          title: "Watches",
-          message: "Updated watch successfully!",
-          watches: await WatchService.getAllWatches(),
-          brands: await BrandService.getAllBrands(),
-          layout: false
-        });
+        res.redirect("/wristwonders/watches");
       }
     }
   } catch (error) {
@@ -139,37 +114,21 @@ const updateWatch = async (req, res, next) => {
   }
 };
 
-const deleteWatch = async (req, res, next) => {
+const deleteWatch = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const { watch_detail } = req.body;
   try {
     const deletedWatch = await WatchService.deleteWatch(id);
     if (deletedWatch.error) {
+      req.flash("error", deletedWatch.error);
       if (watch_detail === "detail") {
-        return res.render("watches/watch_detail", {
-          title: (await WatchService.getWatch(id))?.watchName ?? "",
-          error: deletedWatch.error,
-          watch: await WatchService.getWatch(id),
-          brands: await BrandService.getAllBrands(),
-          layout: false
-        });
+        res.redirect(`/wristwonders/watches/${id}`);
       } else {
-        return res.render("watches", {
-          title: "Watches",
-          error: deletedWatch.error,
-          watches: await WatchService.getAllWatches(),
-          brands: await BrandService.getAllBrands(),
-          layout: false
-        });
+        res.redirect("/wristwonders/watches");
       }
     } else {
-      res.render("watches", {
-        title: "Watches",
-        message: "Deleted watch successfully!",
-        watches: await WatchService.getAllWatches(),
-        brands: await BrandService.getAllBrands(),
-        layout: false
-      });
+      req.flash("message", "Deleted watch successfully!");
+      res.redirect("/wristwonders/watches");
     }
   } catch (error) {
     next(error);

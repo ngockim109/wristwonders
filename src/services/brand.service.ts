@@ -1,5 +1,6 @@
 // brand.service.js
 import Brand from "../models/brand.model";
+import Watch from "../models/watch.model";
 import { BadRequestError } from "../errors/badRequestError";
 
 class BrandService {
@@ -47,9 +48,18 @@ class BrandService {
 
   static async deleteBrand(id: string) {
     const existingBrand = await Brand.findById(id);
+    console.log(existingBrand);
     if (existingBrand) {
-      const deletedBrand = await Brand.findByIdAndDelete(id);
-      return { brand: deletedBrand };
+      const watches = await Watch.find({ brand: id });
+      if (watches.length > 0) {
+        return {
+          error:
+            "Brand cannot be deleted because there are watches associated with it."
+        };
+      } else {
+        const deletedBrand = await Brand.findByIdAndDelete(id);
+        return { brand: deletedBrand };
+      }
     } else {
       return { error: "Brand does not exists!" };
     }

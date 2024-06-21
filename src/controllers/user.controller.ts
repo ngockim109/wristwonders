@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { IMember } from "../interfaces/member.interface";
 import UserService from "../services/user.service";
 import { BadRequestError } from "../errors/badRequestError";
-import { get } from "http";
 import { ValidationError } from "../errors/validationError";
 import { GlobalError } from "../errors/globalError";
 
@@ -18,43 +17,22 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await UserService.createUserHandler(YOBString, user);
     if (result.error) {
-      res.render("accounts", {
-        title: "Accounts",
-        error: result.error,
-        users: await UserService.getAllUsersHandler(),
-        layout: false
-      });
+      req.flash("error", result.error);
+      res.redirect("/wristwonders/accounts");
     }
-    res.render("accounts", {
-      title: "Accounts",
-      message: "Create member successfully!",
-      user: result.user,
-      users: await UserService.getAllUsersHandler(),
-      layout: false
-    });
+    req.flash("message", "Create member successfully!");
+    res.redirect("/wristwonders/accounts");
   } catch (error) {
     if (error instanceof GlobalError) {
       if (error instanceof BadRequestError) {
-        return res.render("accounts", {
-          method: get,
-          title: "Create account fail",
-          member: res.locals.member,
-          user: null,
-          error: error.message,
-          layout: false
-        });
+        req.flash("error", error.message);
+        res.redirect("/wristwonders/accounts");
       } else {
         console.error(error);
       }
       if (error instanceof ValidationError) {
-        return res.render("accounts", {
-          method: get,
-          title: "Create account fail",
-          member: res.locals.member,
-          user: null,
-          error: error.message,
-          layout: false
-        });
+        req.flash("error", error.message);
+        res.redirect("/wristwonders/accounts");
       }
     } else {
       console.error(error);
@@ -101,7 +79,7 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const deleteUser = async (req, res, next) => {
+const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const { brand_detail } = req.body;
   try {
