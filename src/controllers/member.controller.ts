@@ -120,9 +120,10 @@ const updateProfile = async (
       name: req.body.name,
       YOB: req.body.YOB
     };
+    console.log(updateData, memberLocals);
     if (
       updateData.name === memberLocals.name &&
-      updateData.YOB === memberLocals.YOB
+      Number(updateData.YOB) === Number(memberLocals.YOB)
     ) {
       res.render("members/profile/update_profile", {
         title: "Update profile",
