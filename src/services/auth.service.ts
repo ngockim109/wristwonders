@@ -23,4 +23,26 @@ export default class AuthService {
       );
     }
   }
+  static async findOrCreateMember(profile: any) {
+    const { email, displayName, _json } = profile;
+    let member = await Member.findOne({ membername: email });
+
+    if (!member) {
+      const YOB = _json.birthday
+        ? new Date(_json.birthday).getFullYear()
+        : null;
+
+      member = new Member({
+        membername: email,
+        name: displayName,
+        YOB: YOB,
+        password: "",
+        isAdmin: false
+      });
+
+      await member.save();
+    }
+
+    return member;
+  }
 }

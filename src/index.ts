@@ -10,6 +10,7 @@ import methodOverride from "method-override";
 import moment from "moment";
 import session from "express-session";
 import flash from "connect-flash";
+import passport from "./config/passport.config";
 
 const app = express();
 
@@ -31,6 +32,10 @@ const StartServer = () => {
       saveUninitialized: true
     })
   );
+
+  // passport
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   // flash
   app.use(flash());
