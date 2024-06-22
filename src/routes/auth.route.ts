@@ -40,12 +40,22 @@ authRoute.get(
 authRoute.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/wristwonders",
+    successRedirect: "/auth/success",
     failureRedirect: "/wristwonders/auth/login"
   }),
   (req: Request, res: Response) => {
+    res.google.member;
     res.redirect("/wristwonders");
   }
 );
+
+authRoute.get("/success", function (req, res) {
+  const member = res.member;
+  res.sendfile("public/index.htm");
+});
+
+authRoute.get("/failure", function (req, res) {
+  res.json({ message: "hello" });
+});
 
 export default authRoute;
