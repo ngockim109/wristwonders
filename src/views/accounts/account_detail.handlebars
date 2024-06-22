@@ -47,7 +47,7 @@
                                 <strong>Membername:</strong> {{user.membername}}<br>
                                 <strong>Member Id:</strong> {{user._id}}<br>
                                 <strong>Year of birth:</strong> {{user.YOB}}<br>
-                                <strong>Role:</strong> {{#if this.isAdmin}}
+                                <strong>Role:</strong> {{#if user.isAdmin}}
                                 <span class="badge badge-primary rounded-pill text-bg-danger">Admin</span>
                                 {{else}}
                                 <span class="badge badge-info rounded-pill text-bg-info">Member</span>
