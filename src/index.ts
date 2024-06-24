@@ -10,10 +10,19 @@ import methodOverride from "method-override";
 import moment from "moment";
 import session from "express-session";
 import flash from "connect-flash";
+import cors from "cors";
 
 const app = express();
 
 const StartServer = () => {
+  // cors
+  app.use(
+    cors({
+      origin: "http://localhost:5173/",
+      credentials: true
+    })
+  );
+
   // Middleware
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));

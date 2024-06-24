@@ -1,3 +1,5 @@
+import { BadRequestError } from "../errors/badRequestError";
+import { IMember } from "../interfaces/member.interface";
 import { commentModel } from "../models/comment.model";
 import Watch from "../models/watch.model";
 class CommentService {
@@ -17,7 +19,15 @@ class CommentService {
       .populate("author", "membername name");
   }
 
-  static async createComment(watchId: string, commentData, memberId: string) {
+  static async createComment(
+    watchId: string,
+    commentData,
+    memberId: string,
+    member: IMember
+  ) {
+    if (member.isAdmin) {
+      throw new BadRequestError("Admin cannot comment!");
+    }
     const watch = await Watch.findById(watchId);
     if (!commentData.rating) {
       return {
@@ -33,9 +43,7 @@ class CommentService {
       comment.author.equals(memberId)
     );
     if (existingComment) {
-      return {
-        error: "You have already commented on this watch!"
-      };
+      throw new BadRequestError("You have already commented on this watch!");
     } else {
       const comment = new commentModel(commentData);
       await comment.save();
@@ -43,7 +51,7 @@ class CommentService {
       watch.comments.push(comment);
       await watch.save();
 
-      return { comment: comment };
+      return comment;
     }
   }
 }

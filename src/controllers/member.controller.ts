@@ -3,7 +3,7 @@ import { IMember } from "../interfaces/member.interface";
 import { ACCESS_TOKEN_EXPIRATION } from "../utils/jwt";
 import MemberService from "../services/member.service";
 import { Unauthenticated } from "../errors/unauthenticatedError";
-import { Unauthorized } from "../errors/unauthorizedError";
+import { BadRequestError } from "../errors/badRequestError";
 
 // Member register account
 const createMember = async (
@@ -27,12 +27,15 @@ const createMember = async (
           httpOnly: true,
           maxAge: ACCESS_TOKEN_EXPIRATION * 1000
         });
-        res.redirect("/wristwonders");
+        res.status(201).json({ message: "Member created successfully" });
       }
     } catch (error) {
       next(error);
     }
-  } else res.redirect("/wristwonders");
+  } else
+    throw new BadRequestError(
+      "Already logged in! If you want to login another account, please logout!"
+    );
 };
 
 // Get all member who is not admin
@@ -47,7 +50,9 @@ const getAllMembers = async (
     //   ...member.toObject(), // Convert to plain object
     //   _id: member._id.toString() // Convert _id to string
     // }));
-    res.render("members", { members: members, title: "Members" });
+    res
+      .status(200)
+      .json({ message: "Get all members successfully!", data: members });
   } catch (error) {
     next(error);
   }
@@ -62,7 +67,9 @@ const getMember = async (req: Request, res: Response, next: NextFunction) => {
     );
     const { membername, name, YOB, isAdmin } = member;
     const newMember = { membername, name, YOB, isAdmin };
-    res.render("members/profile", { member: newMember, title: "Profile" });
+    res
+      .status(200)
+      .json({ message: "Get member successfully!", data: newMember });
   } catch (error) {
     next(error);
   }
@@ -80,11 +87,9 @@ const getAdminProfile = async (
     );
     const { membername, name, YOB, isAdmin } = member;
     const newMember = { membername, name, YOB, isAdmin };
-    res.render("admin/profile", {
-      member: newMember,
-      title: "Profile",
-      layout: false
-    });
+    res
+      .status(200)
+      .json({ message: "Get admin profile successfully!", data: newMember });
   } catch (error) {
     next(error);
   }
@@ -96,10 +101,9 @@ const getUpdateProfile = (req: Request, res: Response, next: NextFunction) => {
     if (res.locals.member) {
       const { membername, name, YOB, isAdmin } = res.locals.member;
       const newMember = { membername, name, YOB, isAdmin };
-      res.render("members/profile/update_profile", {
-        title: "Update profile",
-        member: newMember,
-        layout: newMember.isAdmin ? false : "main.handlebars"
+      res.status(200).json({
+        message: "Update member profile successfully!",
+        data: newMember
       });
     } else {
       return next(new Unauthenticated());
@@ -125,11 +129,9 @@ const updateProfile = async (
       updateData.name === memberLocals.name &&
       Number(updateData.YOB) === Number(memberLocals.YOB)
     ) {
-      res.render("members/profile/update_profile", {
-        title: "Update profile",
-        error: "The new information cannot same with the old one!",
-        layout: memberLocals.isAdmin ? false : "main.handlebars"
-      });
+      throw new BadRequestError(
+        "The new information cannot be the same as the old one!"
+      );
     } else {
       const updatedMember = await MemberService.updateProfileHandler(
         memberLocals._id,
@@ -138,11 +140,9 @@ const updateProfile = async (
       const { membername, name, YOB, isAdmin } = updatedMember;
       const newMember = { membername, name, YOB, isAdmin };
       if (updatedMember) {
-        res.render("members/profile/update_profile", {
-          member: newMember,
-          title: "Update profile",
-          message: "Update profile successfully!",
-          layout: newMember.isAdmin ? false : "main.handlebars"
+        res.status(200).json({
+          message: "Profile updated successfully!",
+          data: newMember
         });
       }
     }
@@ -157,10 +157,9 @@ const getUpdatePassword = (req: Request, res: Response, next: NextFunction) => {
     if (res.locals.member) {
       const { membername, name, YOB, isAdmin } = res.locals.member;
       const newMember = { membername, name, YOB, isAdmin };
-      res.render("members/profile/update_password", {
-        title: "Change password",
-        member: newMember,
-        layout: newMember.isAdmin ? false : "main.handlebars"
+      res.status(200).json({
+        message: "Get update password successfully!",
+        data: newMember
       });
     } else {
       return next(new Unauthenticated());
@@ -188,16 +187,13 @@ const updatePassword = async (
       confirmPassword
     );
     if (updateMember) {
-      req.flash("message", "Update password successfully! Please login again!");
       res.clearCookie("access_token");
-      res.redirect("/wristwonders/auth/login");
+      res.status(200).json({
+        message: "Password updated successfully! Please login again."
+      });
     }
   } catch (error) {
-    if (error instanceof Unauthorized) {
-      return res.redirect("/wristwonders/auth/login");
-    } else {
-      next(error);
-    }
+    next(error);
   }
 };
 

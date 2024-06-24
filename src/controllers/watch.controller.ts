@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { BadRequestError } from "../errors/badRequestError";
 import BrandService from "../services/brand.service";
 import WatchService from "../services/watch.service";
 
@@ -10,12 +9,8 @@ const getAllWatches = async (
 ) => {
   try {
     const watches = await WatchService.getAllWatches();
-    res.render("watches", {
-      watches: watches,
-      brands: await BrandService.getAllBrands(),
-      title: "Watches",
-      layout: false
-    });
+    const brands = await BrandService.getAllBrands();
+    res.status(200).json({ data: { watches: watches, brands: brands } });
   } catch (error) {
     next(error);
   }
@@ -25,24 +20,10 @@ const getWatch = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   try {
     const watch = await WatchService.getWatch(id);
-    console.log(watch);
-    res.render("watches/watch_detail", {
-      watch,
-      title: watch?.watchName ?? "Watch",
-      brands: await BrandService.getAllBrands(),
-      layout: false
-    });
+    const brands = await BrandService.getAllBrands();
+    res.status(200).json({ data: { watch: watch, brands: brands } });
   } catch (error) {
-    if (error instanceof BadRequestError) {
-      return res.render("watches/watch_detail", {
-        title: "Watch not found",
-        member: res.locals.member,
-        watch: null,
-        layout: false
-      });
-    } else {
-      console.error(error);
-    }
+    next(error);
   }
 };
 
@@ -60,11 +41,7 @@ const createWatch = async (req: Request, res: Response, next: NextFunction) => {
     });
 
     if (result) {
-      req.flash("message", "Created watch successfully!");
-      res.redirect("/wristwonders/watches");
-    } else {
-      req.flash("error", "Created watch failed!");
-      res.redirect("/wristwonders/watches");
+      res.status(200).json({ message: "Created watch successfully!" });
     }
   } catch (error) {
     next(error);
@@ -80,7 +57,6 @@ const updateWatch = async (req: Request, res: Response, next: NextFunction) => {
     automatic,
     watchDescription,
     brandName,
-    watch_detail,
     brandId
   } = req.body;
   try {
@@ -94,21 +70,8 @@ const updateWatch = async (req: Request, res: Response, next: NextFunction) => {
       brandName,
       brandId
     });
-    if (updatedWatch.error) {
-      req.flash("error", updatedWatch.error);
-      if (watch_detail === "detail") {
-        res.redirect(`/wristwonders/watches/${id}`);
-      } else {
-        res.redirect("/wristwonders/watches");
-      }
-    } else {
-      req.flash("message", "Updated watch successfully!");
-      if (watch_detail === "detail") {
-        res.redirect(`/wristwonders/watches/${id}`);
-      } else {
-        res.redirect("/wristwonders/watches");
-      }
-    }
+
+    res.status(200).json({ message: "Updated watch successfully!" });
   } catch (error) {
     next(error);
   }
@@ -116,20 +79,9 @@ const updateWatch = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteWatch = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
-  const { watch_detail } = req.body;
   try {
     const deletedWatch = await WatchService.deleteWatch(id);
-    if (deletedWatch.error) {
-      req.flash("error", deletedWatch.error);
-      if (watch_detail === "detail") {
-        res.redirect(`/wristwonders/watches/${id}`);
-      } else {
-        res.redirect("/wristwonders/watches");
-      }
-    } else {
-      req.flash("message", "Deleted watch successfully!");
-      res.redirect("/wristwonders/watches");
-    }
+    res.status(200).json({ message: "Deleted watch successfully!" });
   } catch (error) {
     next(error);
   }

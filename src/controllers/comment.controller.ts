@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { Unauthorized } from "../errors/unauthorizedError";
 import CommentService from "../services/comment.service";
 import WatchService from "../services/watch.service";
 
@@ -11,10 +10,9 @@ const getAllComments = async (
   try {
     const { id } = req.params;
     const comments = await CommentService.getAllComments(id);
-    res.render("watches", {
-      comments: comments,
-      title: "Watches"
-    });
+    res
+      .status(200)
+      .json({ message: "Get all comments successfully!", data: comments });
   } catch (error) {
     next(error);
   }
@@ -28,10 +26,6 @@ const createComment = async (
   try {
     const { id } = req.params;
     const member = res.locals.member;
-    if (member.isAdmin) {
-      req.flash("error", "Admin cannot comment!");
-      res.redirect(`/wristwonders/watches/collection/${id}`);
-    }
     const memberId = res.locals.member._id;
     const commentData = {
       rating: req.body.rating,
@@ -41,23 +35,14 @@ const createComment = async (
     const comment = await CommentService.createComment(
       id,
       commentData,
-      memberId
+      memberId,
+      member
     );
-    if (comment.comment) {
-      req.flash("message", "Created comment successfully!");
-      res.redirect(`/wristwonders/watches/collection/${id}`);
-    } else {
-      if (comment.error) {
-        req.flash("error", comment.error);
-        res.redirect(`/wristwonders/watches/collection/${id}`);
-      }
-    }
+    res
+      .status(201)
+      .json({ message: "Created comment successfully!", data: comment });
   } catch (error) {
-    if (error instanceof Unauthorized) {
-      res.redirect("/wristwonders/error/403");
-    } else {
-      next(error);
-    }
+    next(error);
   }
 };
 
@@ -69,9 +54,9 @@ const getMemberFeedbacks = async (
   try {
     const memberId = res.locals.member._id;
     const comments = await WatchService.getMemberFeedbacks(memberId);
-    res.render("members/member_feedbacks", {
-      comments: comments,
-      title: "Member Feedbacks"
+    res.status(200).json({
+      message: "Get member feedbacks successfully!",
+      data: comments
     });
   } catch (error) {
     next(error);

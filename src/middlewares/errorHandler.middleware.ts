@@ -13,33 +13,8 @@ const errorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  const transformToTitleCase = (text: string) => {
-    return text
-      .replace(/-/g, " ")
-      .replace(/\b\w/g, (char) => char.toUpperCase());
-  };
-
-  const transformToSnakeCase = (text: string) => {
-    return text.replace(/-/g, "_");
-  };
-
-  const getTitleFromUrl = (url: string) => {
-    const lastSegment = url.substring(url.lastIndexOf("/") + 1);
-    return transformToTitleCase(lastSegment);
-  };
-
-  const getOriginalUrl = (url: string) => {
-    const urlSegments = url.split("/");
-    // Remove the base part (e.g., "wristwonders")
-    const baseRemoved = urlSegments.slice(2).join("/");
-    const lastSegment = baseRemoved.substring(baseRemoved.lastIndexOf("/") + 1);
-    const basePath = baseRemoved.replace(`/${lastSegment}`, "");
-    return `${basePath}/${transformToSnakeCase(lastSegment)}`;
-  };
-  // Transform the title and originalUrl based on req.url
-  const title = getTitleFromUrl(req.url);
-  const originalUrl = getOriginalUrl(req.url);
   let newMember: IMember;
+
   if (res.locals.member) {
     const member = res.locals.member;
     const {
@@ -71,79 +46,43 @@ const errorHandler: ErrorRequestHandler = (
     if (error instanceof ValidationError) {
       const data =
         error.data && typeof error.data === "object" ? error.data : {};
-      console.error(error.errors);
-      if (originalUrl === "accounts/accounts") {
-        return res.render("accounts", {
-          title: title,
-          member: newMember,
-          error: error.errors,
-          ...data
-        });
-      }
-      if (
-        originalUrl.includes("members/profile/update_password") ||
-        originalUrl.includes("members/profile/update_profile")
-      ) {
-        return res.render(originalUrl, {
-          title: title,
-          member: newMember,
-          error: error.errors,
-          layout: newMember?.isAdmin ? false : "main.handlebars",
-          ...data
-        });
-      }
-      return res.render(originalUrl, {
-        title: title,
-        member: newMember,
+      return res.status(400).json({
         error: error.errors,
+        member: newMember,
         ...data
       });
     }
 
     // Handle Unauthenticated errors, redirect login
     if (error instanceof Unauthenticated) {
-      return res.redirect("/wristwonders/auth/login");
+      return res.status(401).json({ error: "Unauthenticated" });
     }
 
     // Handle Unauthorized errors, forbidden
     if (error instanceof Unauthorized) {
-      return res.redirect("/wristwonders/error/403");
-      // return res.redirect("/wristwonders/error/404");
+      return res.status(403).json({ error: "Unauthorized" });
     }
 
     // Handle bad request errors
     if (error instanceof BadRequestError) {
       const data =
         error.data && typeof error.data === "object" ? error.data : {};
-      console.error("error", error);
-      if (
-        originalUrl.includes("members/profile/update_password") ||
-        originalUrl.includes("members/profile/update_profile")
-      ) {
-        return res.render(originalUrl, {
-          title: title,
-          member: newMember,
-          error: error.message,
-          layout: newMember?.isAdmin ? false : "main.handlebars",
-          ...data
-        });
-      }
-      return res.render(originalUrl, {
-        title: title,
-        member: newMember,
+      return res.status(400).json({
         error: error.message,
+        member: newMember,
         ...data
       });
     }
 
     // Handle not found errors
     if (error instanceof NotFoundError) {
-      return res.redirect("/wristwonders/error/404");
+      return res.status(404).json({ error: "Not Found" });
     }
   }
 
   // Handle server errors
   console.error(`Path: ${req.path}`, error);
-  return res.redirect("/wristwonders/error/500");
+  return res.status(500).json({ error: "Internal Server Error" });
 };
+
 export default errorHandler;

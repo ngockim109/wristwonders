@@ -1,5 +1,6 @@
 import { IMember } from "./../interfaces/member.interface";
 import Member from "../models/member.model";
+import { BadRequestError } from "../errors/badRequestError";
 
 export default class UserService {
   static async getAllUsersHandler() {
@@ -15,9 +16,9 @@ export default class UserService {
     const existingMember = await Member.findById(memberId);
     if (existingMember) {
       const deletedMember = await Member.findByIdAndDelete(memberId);
-      return { user: deletedMember };
+      return deletedMember;
     } else {
-      return { error: "Member does not exists!" };
+      throw new BadRequestError("Member does not exists!");
     }
   }
 
@@ -25,13 +26,13 @@ export default class UserService {
     const yob = Number(YOBString);
 
     if (isNaN(yob)) {
-      return { error: "Year of birth must be a number!" };
+      throw new BadRequestError("Year of birth must be a number!");
     }
     if (user.password.length < 8) {
-      return { error: "Password must be greater than 8 characters!" };
+      throw new BadRequestError("Password must be at least 8 characters!");
     }
     if (/\s/.test(user.membername)) {
-      return { error: "Membername must not contain spaces!" };
+      throw new BadRequestError("Membername must not contain spaces!");
     }
     try {
       // Check if membername already exists
@@ -40,7 +41,7 @@ export default class UserService {
       });
 
       if (existingUser) {
-        return { error: "Membername already exists!" };
+        throw new BadRequestError("Membername already exists!");
       }
 
       // Create a new user instance
@@ -48,9 +49,9 @@ export default class UserService {
 
       // Save the user to the database
       const newUserCreated = await newUser.save();
-      return { user: newUserCreated };
+      return newUserCreated;
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
 }

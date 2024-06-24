@@ -9,15 +9,12 @@ export default class WatchService {
   }
   static async getWatchesByBrand(brandName: string) {
     const brand = await Brand.findOne({ brandName });
-    if (!brand)
-      return {
-        error: "Brand not found"
-      };
+    if (!brand) throw new BadRequestError("Brand not found");
     const watches = await Watch.find({ brand: brand._id })
       .populate("brand")
       .exec();
     console.log(watches);
-    return { watches: watches };
+    return watches;
   }
 
   static async getWatch(watchId: string) {
@@ -35,22 +32,15 @@ export default class WatchService {
   static async createWatch(data) {
     const newWatch = new Watch(data);
     await newWatch.save();
-    return { watch: newWatch };
+    return newWatch;
   }
 
   static async updateWatch(id: string, data) {
     const watch = await Watch.findById(id);
     if (!watch) {
-      return { error: "Watch not found!" };
+      throw new BadRequestError("Watch not found!");
     }
     const result = data.automatic ? data.automatic : watch.automatic;
-    console.log(watch.brand.toString());
-    console.log(data.brandId);
-    console.log(watch.automatic === result);
-    console.log(watch.watchName === data.watchName);
-    console.log(watch.watchDescription === data.watchDescription);
-    console.log(watch.price === Number(data.price));
-    console.log(watch.brand.toString() === data.brandId);
     if (
       watch.watchName === data.watchName &&
       watch.image === data.image &&
@@ -58,21 +48,17 @@ export default class WatchService {
       watch.price === Number(data.price) &&
       watch.automatic === result
     ) {
-      return {
-        error: "The new watch information cannot be the same as the old watch!"
-      };
+      throw new BadRequestError(
+        "The new watch information cannot be the same as the old watch!"
+      );
     }
     const brand = await Brand.findById(data.brandId);
     const newBrand = await Brand.findById(data.brandName);
     if (!brand) {
-      return {
-        error: "Brand does not exits!"
-      };
+      throw new BadRequestError("Brand does not exits!");
     } else {
       if (!newBrand) {
-        return {
-          error: "Brand name does not exits!"
-        };
+        throw new BadRequestError("Brand name does not exits!");
       } else {
         const updatedWatch = await Watch.findByIdAndUpdate(
           id,
@@ -81,7 +67,7 @@ export default class WatchService {
             new: true
           }
         ).populate("brand");
-        return { watch: updatedWatch };
+        return updatedWatch;
       }
     }
   }
@@ -89,13 +75,13 @@ export default class WatchService {
   static async deleteWatch(id) {
     const existingWatch = await Watch.findById(id);
     if (!existingWatch) {
-      return { error: "Watch does not exist!" };
+      throw new BadRequestError("Watch does not exits!");
     } else {
       if (existingWatch?.comments?.length > 0) {
-        return { error: "Cannot delete watch already has comment!" };
+        throw new BadRequestError("Cannot delete watch already has comment!");
       }
       const deletedWatch = await Watch.findByIdAndDelete(id);
-      return { watch: deletedWatch };
+      return deletedWatch;
     }
   }
   static async searchWatches(query: string) {

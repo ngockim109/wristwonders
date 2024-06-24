@@ -7,20 +7,14 @@ export default class AuthService {
   static async loginHandler(loginDTO: ILogin) {
     const member = await Member.findOne({ membername: loginDTO.membername });
     if (!member) {
-      throw new BadRequestError(
-        "The membername or password is incorrect!",
-        loginDTO
-      );
+      throw new BadRequestError("The membername or password is incorrect!");
     }
     const auth = await compareHashPassword(loginDTO.password, member.password);
     if (auth) {
       const token = createAccessToken({ member_id: member._id });
       return { token: token, member: member };
     } else {
-      throw new BadRequestError(
-        "The membername or password is incorrect!",
-        loginDTO
-      );
+      throw new BadRequestError("The membername or password is incorrect!");
     }
   }
 }
