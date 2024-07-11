@@ -30,14 +30,10 @@ class CommentService {
     }
     const watch = await Watch.findById(watchId);
     if (!commentData.rating) {
-      return {
-        error: "Rating is required!"
-      };
+      throw new BadRequestError("Rating is required!");
     }
     if (commentData.rating > 3 || commentData.rating < 1) {
-      return {
-        error: "Rating must be 1-3 star!"
-      };
+      throw new BadRequestError("Rating must be between 1-3 star!");
     }
     const existingComment = await watch.comments.find((comment) =>
       comment.author.equals(memberId)

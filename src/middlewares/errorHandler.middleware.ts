@@ -55,6 +55,7 @@ const errorHandler: ErrorRequestHandler = (
 
     // Handle Unauthenticated errors, redirect login
     if (error instanceof Unauthenticated) {
+      res.cookie("access_token", "", { maxAge: 1 });
       return res.status(401).json({ error: "Unauthenticated" });
     }
 

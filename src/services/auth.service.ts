@@ -11,7 +11,12 @@ export default class AuthService {
     }
     const auth = await compareHashPassword(loginDTO.password, member.password);
     if (auth) {
-      const token = createAccessToken({ member_id: member._id });
+      const token = createAccessToken({
+        member_id: member._id,
+        membername: member.membername,
+        name: member.name,
+        isAdmin: member.isAdmin
+      });
       return { token: token, member: member };
     } else {
       throw new BadRequestError("The membername or password is incorrect!");

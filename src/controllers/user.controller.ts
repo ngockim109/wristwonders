@@ -13,7 +13,8 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   const YOBString = req.body.YOB;
   try {
     const result = await UserService.createUserHandler(YOBString, user);
-    res.status(201).json({ message: "Member created successfully!" });
+    if (result)
+      res.status(201).json({ message: "Member created successfully!" });
   } catch (error) {
     next(error);
   }

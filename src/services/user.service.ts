@@ -28,30 +28,27 @@ export default class UserService {
     if (isNaN(yob)) {
       throw new BadRequestError("Year of birth must be a number!");
     }
-    if (user.password.length < 8) {
+    if (user?.password?.length < 8) {
       throw new BadRequestError("Password must be at least 8 characters!");
     }
-    if (/\s/.test(user.membername)) {
+    if (/\s/.test(user?.membername)) {
       throw new BadRequestError("Membername must not contain spaces!");
     }
-    try {
-      // Check if membername already exists
-      const existingUser: IMember = await Member.findOne({
-        membername: user.membername
-      });
 
-      if (existingUser) {
-        throw new BadRequestError("Membername already exists!");
-      }
+    // Check if membername already exists
+    const existingUser: IMember = await Member.findOne({
+      membername: user.membername
+    });
 
-      // Create a new user instance
-      const newUser = new Member(user);
-
-      // Save the user to the database
-      const newUserCreated = await newUser.save();
-      return newUserCreated;
-    } catch (error) {
-      console.log(error);
+    if (existingUser) {
+      throw new BadRequestError("Membername already exists!");
     }
+
+    // Create a new user instance
+    const newUser = new Member(user);
+
+    // Save the user to the database
+    const newUserCreated = await newUser.save();
+    return newUserCreated;
   }
 }

@@ -2,7 +2,7 @@ import { ILogin } from "./../interfaces/login.interface";
 import { NextFunction, Request, Response } from "express";
 import { ACCESS_TOKEN_EXPIRATION } from "../utils/jwt";
 import AuthService from "../services/auth.service";
-import { IMember } from "../interfaces/member.interface";
+import { BadRequestError } from "../errors/badRequestError";
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
   const { membername, password } = req.body;
@@ -10,27 +10,19 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     if (!res.locals.member) {
       const loginData: ILogin = { membername, password };
       const result = await AuthService.loginHandler(loginData);
-      const newMember: IMember = {
-        membername: result.member.membername,
-        name: result.member.name,
-        YOB: result.member.YOB,
-        isAdmin: result.member.isAdmin
-      };
       // Store token to cookies
       res.cookie("access_token", result.token, {
-        httpOnly: true,
+        // httpOnly: true,
         maxAge: ACCESS_TOKEN_EXPIRATION * 1000
       });
       res.json({
         message: "Login successful!",
-        token: result.token,
-        member: newMember
+        token: result.token
       });
     } else {
-      res.json({
-        message:
-          "Already logged in! If you want to login another account, please logout!"
-      });
+      throw new BadRequestError(
+        "Already logged in! If you want to login another account, please logout!"
+      );
     }
   } catch (error) {
     next(error);

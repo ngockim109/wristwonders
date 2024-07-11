@@ -18,7 +18,20 @@ const getWatch = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   try {
     const watch = await WatchService.getWatch(id);
-    res.status(200).json({ message: "Get watch successfully!", data: watch });
+    const totalComments = watch?.comments?.length || 0;
+    const totalRating =
+      watch?.comments?.reduce((sum, comment) => sum + comment.rating, 0) || 0;
+    const averageRating = totalComments
+      ? parseFloat((totalRating / totalComments).toFixed(2))
+      : 0;
+    res.status(200).json({
+      message: "Get watch successfully!",
+      data: {
+        ...watch.toObject(),
+        totalComments,
+        averageRating
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -54,7 +67,10 @@ const filterWatchesByBrand = async (
     //     title: "WristWonders"
     //   });
     // }
-    const watches = await WatchService.getWatchesByBrand(filterBrandName);
+    const watches =
+      filterBrandName === "All"
+        ? allWatches
+        : await WatchService.getWatchesByBrand(filterBrandName);
     console.log(filterBrandName);
     res.status(200).json({
       message: "Filter brand successfully!",

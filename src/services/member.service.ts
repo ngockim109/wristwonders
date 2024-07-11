@@ -48,7 +48,12 @@ export default class MemberService {
       const mem = await newMember.save();
 
       // Save token
-      const token = createAccessToken({ member_id: mem._id });
+      const token = createAccessToken({
+        member_id: mem._id,
+        membername: mem.membername,
+        name: mem.name,
+        isAdmin: mem.isAdmin
+      });
       return token;
     }
   }

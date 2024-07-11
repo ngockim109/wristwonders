@@ -27,15 +27,21 @@ const createMember = async (
           httpOnly: true,
           maxAge: ACCESS_TOKEN_EXPIRATION * 1000
         });
-        res.status(201).json({ message: "Member created successfully" });
+        res
+          .status(201)
+          .json({ message: "Member created successfully", token: token });
       }
     } catch (error) {
       next(error);
     }
-  } else
-    throw new BadRequestError(
-      "Already logged in! If you want to login another account, please logout!"
-    );
+  } else {
+    res
+      .status(400)
+      .json({
+        error:
+          "Already logged in! If you want to login another account, please logout!"
+      });
+  }
 };
 
 // Get all member who is not admin
@@ -62,6 +68,7 @@ const getAllMembers = async (
 const getMember = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const memberLocals = res.locals.member;
+    console.log(res.locals);
     const member: IMember = await MemberService.getMemberHandler(
       memberLocals._id
     );
